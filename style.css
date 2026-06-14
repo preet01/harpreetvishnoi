@@ -308,6 +308,111 @@ footer a:hover {
   color: var(--text);
 }
 
+/* ---- Article / Post ---- */
+.post {
+  max-width: 100%;
+}
+
+.post-header {
+  margin-bottom: 3rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.post-header h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+  margin-bottom: 0.75rem;
+}
+
+.post-meta {
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.post-body {
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--text);
+}
+
+.post-body h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 2.25rem 0 0.75rem;
+  color: var(--text);
+}
+
+.post-body h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 1.75rem 0 0.5rem;
+  color: var(--text);
+}
+
+.post-body p {
+  margin-bottom: 1.25rem;
+}
+
+.post-body p:last-child {
+  margin-bottom: 0;
+}
+
+.post-body ul,
+.post-body ol {
+  margin: 0 0 1.25rem 1.25rem;
+}
+
+.post-body li {
+  margin-bottom: 0.45rem;
+}
+
+.post-body strong {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.post-body em {
+  font-style: italic;
+}
+
+.post-body blockquote {
+  border-left: 2px solid var(--border);
+  padding-left: 1.1rem;
+  margin: 1.5rem 0;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.post-body a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--border);
+  transition: text-decoration-color 0.15s;
+}
+
+.post-body a:hover {
+  text-decoration-color: var(--text);
+}
+
+.post-back {
+  display: inline-block;
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-decoration: none;
+  margin-bottom: 2.5rem;
+  transition: color 0.15s;
+}
+
+.post-back:hover {
+  color: var(--text);
+}
+
 /* ---- Mobile ---- */
 @media (max-width: 600px) {
   html { font-size: 16px; }

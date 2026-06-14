@@ -1,0 +1,2447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dream Catcher Architecture — Harpreet Vishnoi</title>
+  <style>
+    .site-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0 32px;
+      height: 52px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+      border-bottom: 1px solid #E5E5EA;
+    }
+    .site-nav-home { font-size: 0.95rem; font-weight: 500; color: #1D1D1F; text-decoration: none; }
+    .site-nav-links { display: flex; gap: 1.75rem; }
+    .site-nav-links a { font-size: 0.88rem; color: #6E6E73; text-decoration: none; transition: color 0.15s; }
+    .site-nav-links a:hover, .site-nav-links a.active { color: #1D1D1F; }
+    .site-footer { max-width: 820px; margin: 2rem auto 0; padding: 1.5rem 32px 2.5rem; border-top: 1px solid #E5E5EA; font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif; }
+    .site-footer a { font-size: 0.82rem; color: #6E6E73; text-decoration: none; }
+    .site-footer a:hover { color: #1D1D1F; }
+  </style>
+  <style>
+    /* ── Print defaults ─────────────────────────────────────── */
+    @page {
+      size: A4;
+      margin: 22mm 20mm 22mm 20mm;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: 11pt;
+      line-height: 1.65;
+      color: #1a1a1a;
+      background: #fff;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 40px 32px;
+    }
+
+    /* ── Cover ─────────────────────────────────────────────── */
+    .cover {
+      text-align: center;
+      padding: 80px 0 60px;
+      border-bottom: 2px solid #1a1a1a;
+      margin-bottom: 56px;
+      page-break-after: always;
+    }
+    .cover .moon { font-size: 48px; display: block; margin-bottom: 20px; }
+    .cover h1 { font-size: 28pt; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
+    .cover .subtitle { font-size: 13pt; color: #555; margin-bottom: 32px; font-style: italic; }
+    .cover .meta { font-size: 10pt; color: #888; }
+    .cover .meta span { display: inline-block; margin: 0 12px; }
+
+    /* ── TOC ────────────────────────────────────────────────── */
+    .toc { page-break-after: always; margin-bottom: 56px; }
+    .toc h2 { font-size: 16pt; margin-bottom: 20px; padding-bottom: 6px; border-bottom: 1px solid #ccc; }
+    .toc ol { padding-left: 20px; }
+    .toc li { padding: 4px 0; font-size: 11pt; }
+    .toc li a { color: #1a1a1a; text-decoration: none; }
+    .toc li a:hover { text-decoration: underline; }
+    .toc .toc-sub { font-size: 10pt; padding-left: 16px; color: #555; list-style-type: none; }
+    .toc .toc-sub li { padding: 2px 0; }
+
+    /* ── Headings ───────────────────────────────────────────── */
+    h1 { font-size: 22pt; margin-bottom: 12px; }
+    h2 {
+      font-size: 15pt;
+      margin-top: 40px;
+      margin-bottom: 14px;
+      padding-bottom: 6px;
+      border-bottom: 1.5px solid #1a1a1a;
+      page-break-after: avoid;
+    }
+    h3 {
+      font-size: 12pt;
+      margin-top: 28px;
+      margin-bottom: 10px;
+      font-weight: 700;
+      page-break-after: avoid;
+    }
+    h4 {
+      font-size: 11pt;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    /* ── Prose ─────────────────────────────────────────────── */
+    p { margin-bottom: 12px; }
+    ul, ol { margin: 10px 0 12px 22px; }
+    li { margin-bottom: 4px; }
+
+    /* ── Architecture diagram ───────────────────────────────── */
+    .diagram-wrapper {
+      margin: 24px 0;
+      page-break-inside: avoid;
+    }
+    .diagram {
+      font-family: 'Courier New', monospace;
+      font-size: 8.5pt;
+      line-height: 1.45;
+      background: #f7f7f7;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 20px 22px;
+      white-space: pre;
+      overflow: hidden;
+    }
+    .diagram-caption {
+      text-align: center;
+      font-size: 9.5pt;
+      color: #666;
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    /* ── Code blocks ────────────────────────────────────────── */
+    pre {
+      font-family: 'Courier New', monospace;
+      font-size: 9pt;
+      background: #f7f7f7;
+      border: 1px solid #ddd;
+      border-left: 3px solid #888;
+      padding: 12px 14px;
+      margin: 12px 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      page-break-inside: avoid;
+      border-radius: 0 3px 3px 0;
+    }
+    code {
+      font-family: 'Courier New', monospace;
+      font-size: 9.5pt;
+      background: #f0f0f0;
+      padding: 1px 4px;
+      border-radius: 2px;
+    }
+
+    /* ── Tables ─────────────────────────────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 10pt;
+      page-break-inside: avoid;
+    }
+    th {
+      background: #1a1a1a;
+      color: #fff;
+      font-weight: 600;
+      text-align: left;
+      padding: 7px 10px;
+      font-size: 9.5pt;
+    }
+    td {
+      border: 1px solid #ccc;
+      padding: 6px 10px;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background: #fafafa; }
+
+    /* ── Info/warning boxes ─────────────────────────────────── */
+    .box {
+      padding: 12px 16px;
+      border-radius: 3px;
+      margin: 14px 0;
+      page-break-inside: avoid;
+      font-size: 10.5pt;
+    }
+    .box-note { background: #eef4ff; border-left: 4px solid #4a7fe8; }
+    .box-warn { background: #fff8e1; border-left: 4px solid #e0a800; }
+    .box-secure { background: #eaf7ee; border-left: 4px solid #34a853; }
+
+    /* ── Section dividers ───────────────────────────────────── */
+    .section { margin-top: 48px; }
+    hr { border: none; border-top: 1px solid #ddd; margin: 28px 0; }
+
+    /* ── Flow steps ─────────────────────────────────────────── */
+    .flow {
+      display: table;
+      width: 100%;
+      margin: 14px 0;
+    }
+    .flow-step {
+      display: table-row;
+    }
+    .flow-step .num {
+      display: table-cell;
+      width: 28px;
+      font-weight: 700;
+      color: #555;
+      padding-right: 10px;
+      padding-bottom: 6px;
+      vertical-align: top;
+      font-size: 10pt;
+    }
+    .flow-step .text {
+      display: table-cell;
+      padding-bottom: 6px;
+      font-size: 10.5pt;
+    }
+
+    /* ── Print overrides ────────────────────────────────────── */
+    @media print {
+      body { padding: 0; }
+      a { color: #1a1a1a; }
+      .no-print { display: none; }
+    }
+
+    /* ── Page break helpers ─────────────────────────────────── */
+    .page-break { page-break-before: always; }
+    .keep-together { page-break-inside: avoid; }
+
+    /* ── Tab navigation ─────────────────────────────────────── */
+    .tab-nav-wrapper {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 100;
+      border-bottom: 2px solid #1a1a1a;
+      margin: -40px -32px 40px;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .tab-group {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 0 32px;
+      gap: 0;
+    }
+    .tab-group::-webkit-scrollbar { display: none; }
+    .tab-group-label {
+      font-size: 7.5pt;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #aaa;
+      padding: 6px 32px 0;
+      font-family: 'Georgia', serif;
+    }
+    .tab-group + .tab-group {
+      border-top: 1px solid #eee;
+    }
+    .tab-btn {
+      flex-shrink: 0;
+      padding: 9px 14px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: 10pt;
+      color: #888;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      white-space: nowrap;
+      transition: color 0.15s;
+    }
+    .tab-btn:hover { color: #1a1a1a; }
+    .tab-btn.active { color: #1a1a1a; font-weight: 700; border-bottom-color: #1a1a1a; }
+    .tab-btn.explainer-tab { font-style: italic; }
+
+    /* ── Prev / Next ────────────────────────────────────────── */
+    .page-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 48px;
+      padding: 20px 0 8px;
+      border-top: 1px solid #ddd;
+    }
+    .page-nav-btn {
+      padding: 8px 22px;
+      border: 1.5px solid #1a1a1a;
+      background: none;
+      cursor: pointer;
+      font-family: 'Georgia', serif;
+      font-size: 10.5pt;
+      border-radius: 3px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .page-nav-btn:hover:not(:disabled) { background: #1a1a1a; color: #fff; }
+    .page-nav-btn:disabled { opacity: 0.25; cursor: default; }
+    .page-indicator { font-size: 10pt; color: #999; font-family: 'Georgia', serif; }
+
+    /* ── Print: show everything, hide chrome ───────────────── */
+    @media print {
+      .tab-nav-wrapper, .page-nav { display: none !important; }
+      .tab-section { display: block !important; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="../index.html" class="site-nav-home">Harpreet Vishnoi</a>
+  <div class="site-nav-links">
+    <a href="../writing.html">Writing</a>
+    <a href="../projects.html" class="active">Projects</a>
+  </div>
+</nav>
+
+<!-- ── Tab navigation bar ─────────────────────────────── -->
+<nav class="tab-nav-wrapper no-print">
+  <div class="tab-group" id="group-ref">
+    <span class="tab-group-label" style="display:flex;align-items:center;padding:5px 14px 0;font-size:7pt;color:#bbb;white-space:nowrap;">Reference</span>
+    <button class="tab-btn active" data-tab="0">Contents</button>
+    <button class="tab-btn" data-tab="1">Architecture</button>
+    <button class="tab-btn" data-tab="2">Netlify &amp; Auth</button>
+    <button class="tab-btn" data-tab="3">Supabase</button>
+    <button class="tab-btn" data-tab="4">Edge Functions</button>
+    <button class="tab-btn" data-tab="5">API &amp; Security</button>
+  </div>
+  <div class="tab-group">
+    <span class="tab-group-label" style="display:flex;align-items:center;padding:5px 14px 0;font-size:7pt;color:#bbb;white-space:nowrap;">Deep Explainer</span>
+    <button class="tab-btn explainer-tab" data-tab="6">HTTPS</button>
+    <button class="tab-btn explainer-tab" data-tab="7">Google Sign-In</button>
+    <button class="tab-btn explainer-tab" data-tab="8">JWTs</button>
+    <button class="tab-btn explainer-tab" data-tab="9">Edge Fns &amp; Deno</button>
+    <button class="tab-btn explainer-tab" data-tab="10">Database &amp; RLS</button>
+    <button class="tab-btn explainer-tab" data-tab="11">Netlify &amp; CDN</button>
+    <button class="tab-btn explainer-tab" data-tab="12">Full Walkthrough</button>
+    <button class="tab-btn explainer-tab" data-tab="13">Glossary</button>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════
+     COVER
+═══════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <span class="moon">🌙</span>
+  <h1>Dream Catcher</h1>
+  <p class="subtitle">System Architecture &amp; Technical Reference</p>
+  <p class="meta">
+    <span>Version 1.0</span>
+    <span>June 2026</span>
+    <span>Dream Catcher</span>
+  </p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     TABLE OF CONTENTS
+═══════════════════════════════════════════════════════════ -->
+<div class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#arch-overview">Architecture Overview</a></li>
+    <li><a href="#netlify">Netlify Hosting</a></li>
+    <li><a href="#google-sso">Google SSO &amp; Authentication</a></li>
+    <li><a href="#supabase-layers">Supabase Layers</a>
+      <ul class="toc-sub">
+        <li>4.1 Auth &amp; Session tokens</li>
+        <li>4.2 PostgreSQL database</li>
+        <li>4.3 Storage bucket</li>
+        <li>4.4 Edge Functions runtime</li>
+      </ul>
+    </li>
+    <li><a href="#edge-functions">Edge Functions in Depth</a>
+      <ul class="toc-sub">
+        <li>5.1 transcribe-audio</li>
+        <li>5.2 extract-scenes</li>
+        <li>5.3 generate-image</li>
+      </ul>
+    </li>
+    <li><a href="#api-journey">Full API Call Journey</a></li>
+    <li><a href="#db-security">Database Security &amp; RLS</a></li>
+    <li><a href="#secrets">Secrets &amp; Environment Variables</a></li>
+    <li><a href="#summary">Integration Summary Table</a></li>
+  </ol>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     1. ARCHITECTURE OVERVIEW
+═══════════════════════════════════════════════════════════ -->
+<div class="section" id="arch-overview">
+  <h2>1. Architecture Overview</h2>
+
+  <p>
+    Dream Catcher is a static web application hosted on Netlify with zero backend servers.
+    All dynamic compute runs inside Supabase Edge Functions — short-lived Deno processes
+    that proxy calls to external AI APIs (Anthropic Claude and OpenAI) while keeping
+    secret keys out of the browser.
+  </p>
+
+  <div class="diagram-wrapper">
+    <div class="diagram">
+ ┌──────────────────────────────────────────────────────────────────────────────┐
+ │                           DREAM CATCHER SYSTEM                               │
+ └──────────────────────────────────────────────────────────────────────────────┘
+
+   BROWSER (Netlify CDN)
+  ┌────────────────────────────────────────────────────────────────────────┐
+  │  index.html  style.css  app.js  api.js  auth.js  db.js  config.js     │
+  │                                                                        │
+  │  MediaRecorder API ──► audio blob                                     │
+  │  Supabase JS SDK   ──► auth tokens, DB queries                        │
+  └────────────┬───────────────────────┬──────────────────────────────────┘
+               │ HTTPS                 │ HTTPS (Supabase REST)
+               ▼                       ▼
+  ┌────────────────────┐   ┌──────────────────────────────────────────────┐
+  │   Google OAuth 2.0 │   │                  SUPABASE                    │
+  │   (consent screen) │   │                                              │
+  │                    │   │  ┌──────────────┐  ┌──────────────────────┐ │
+  │   Redirect back    │──►│  │  Auth Service│  │   PostgreSQL DB      │ │
+  │   with tokens      │   │  │  (JWT issue) │  │                      │ │
+  └────────────────────┘   │  └──────────────┘  │  dreams table        │ │
+                           │                    │  profiles table      │ │
+                           │  ┌──────────────┐  └──────────────────────┘ │
+                           │  │   Storage    │                            │
+                           │  │  Bucket      │  ┌──────────────────────┐ │
+                           │  │ dream-catcher│  │   Edge Functions     │ │
+                           │  │    -db/      │  │  (Deno runtime)      │ │
+                           │  └──────┬───────┘  │                      │ │
+                           │         ▲           │  transcribe-audio   │ │
+                           │  images │           │  extract-scenes     │ │
+                           │  stored │           │  generate-image     │ │
+                           └─────────┼───────────┴──────┬──────────────┘ │
+                                     │                  │ HTTPS (API keys)
+                                     │         ┌────────┴──────────────┐
+                                     │         │   EXTERNAL AI APIS    │
+                                     │         │                       │
+                                     │         │  Anthropic Claude     │
+                                     │         │  (extract-scenes)     │
+                                     │         │                       │
+                                     │         │  OpenAI Whisper       │
+                                     │         │  (transcribe-audio)   │
+                                     │         │                       │
+                                     └─────────│  OpenAI gpt-image-1   │
+                                      images   │  (generate-image)     │
+                                      uploaded └───────────────────────┘
+    </div>
+    <p class="diagram-caption">Figure 1 — High-level system architecture</p>
+  </div>
+
+  <h3>Key Design Principles</h3>
+  <ul>
+    <li><strong>No backend server.</strong> Netlify serves static files. All business logic lives in Edge Functions or the browser.</li>
+    <li><strong>API keys never reach the browser.</strong> Claude and OpenAI keys are stored as Supabase secrets, only accessible inside Edge Functions.</li>
+    <li><strong>Auth-gated compute.</strong> Every Edge Function validates a Supabase JWT before processing. Unauthenticated requests are rejected with 401.</li>
+    <li><strong>Row-Level Security everywhere.</strong> The Supabase anon key (visible in <code>config.js</code>) is safe to expose because PostgreSQL RLS policies ensure users can only touch their own rows.</li>
+  </ul>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     2. NETLIFY HOSTING
+═══════════════════════════════════════════════════════════ -->
+<div class="section page-break" id="netlify">
+  <h2>2. Netlify Hosting</h2>
+
+  <p>
+    Netlify serves the entire repository root as a static site. There is no build step —
+    the HTML, CSS, and JS files are shipped exactly as authored.
+  </p>
+
+  <h3>netlify.toml</h3>
+  <pre>[build]
+  publish = "."          # Serve the repo root directly
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"</pre>
+
+  <h3>What Netlify provides</h3>
+  <table>
+    <tr><th>Capability</th><th>Detail</th></tr>
+    <tr><td>CDN distribution</td><td>Static assets served from edge nodes globally</td></tr>
+    <tr><td>HTTPS</td><td>Automatic TLS certificate via Let's Encrypt</td></tr>
+    <tr><td>Deploy previews</td><td>Every git push creates a preview URL</td></tr>
+    <tr><td>Security headers</td><td>Clickjack protection, MIME sniff prevention, referrer control</td></tr>
+    <tr><td>Redirects / rewrites</td><td>Not currently used; app is single-page</td></tr>
+  </table>
+
+  <div class="box box-note">
+    <strong>No Netlify Functions.</strong> All serverless compute uses Supabase Edge Functions, not
+    Netlify Functions. This keeps AI API keys inside Supabase's secret management instead of
+    Netlify's environment variables.
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     3. GOOGLE SSO & AUTHENTICATION
+═══════════════════════════════════════════════════════════ -->
+<div class="section" id="google-sso">
+  <h2>3. Google SSO &amp; Authentication</h2>
+
+  <p>
+    Authentication is delegated entirely to Supabase Auth, which acts as an OAuth 2.0 proxy
+    in front of Google. The browser never handles raw OAuth tokens directly.
+  </p>
+
+  <h3>Login flow (step by step)</h3>
+  <div class="flow">
+    <div class="flow-step"><span class="num">1</span><span class="text">User clicks <em>Sign in with Google</em>. <code>auth.js</code> calls <code>supabase.auth.signInWithOAuth({ provider: 'google' })</code>.</span></div>
+    <div class="flow-step"><span class="num">2</span><span class="text">Supabase Auth redirects the browser to Google's OAuth consent screen.</span></div>
+    <div class="flow-step"><span class="num">3</span><span class="text">User approves. Google redirects back to <code>window.location.href</code> (the app URL) with an authorization code in the URL fragment.</span></div>
+    <div class="flow-step"><span class="num">4</span><span class="text">Supabase JS SDK intercepts the fragment, exchanges the code for Google access/refresh tokens, then issues its own signed JWT (the <em>Supabase session token</em>).</span></div>
+    <div class="flow-step"><span class="num">5</span><span class="text">The Supabase session is persisted in <code>localStorage</code> automatically. The SDK refreshes it silently before it expires.</span></div>
+    <div class="flow-step"><span class="num">6</span><span class="text"><code>onAuthStateChange</code> fires a <code>SIGNED_IN</code> event. <code>auth.js</code> hides the login screen and shows the app.</span></div>
+    <div class="flow-step"><span class="num">7</span><span class="text"><code>DB.upsertProfile(user)</code> creates or updates the <code>profiles</code> row with <code>display_name</code> and <code>avatar_url</code> from Google's user metadata.</span></div>
+    <div class="flow-step"><span class="num">8</span><span class="text">The app loads the user's dreams and appearance profile from Supabase Postgres.</span></div>
+  </div>
+
+  <div class="diagram-wrapper">
+    <div class="diagram">
+   Browser                  Supabase Auth              Google OAuth
+      │                          │                          │
+      │ signInWithOAuth()         │                          │
+      │─────────────────────────►│                          │
+      │                          │  redirect to consent     │
+      │◄─────────────────────────┤─────────────────────────►│
+      │                          │                          │ user approves
+      │  redirect back + code    │◄─────────────────────────┤
+      │◄─────────────────────────┤                          │
+      │  SDK exchanges code      │                          │
+      │─────────────────────────►│                          │
+      │                          │  issues Supabase JWT     │
+      │◄─────────────────────────┤                          │
+      │  stores JWT in           │                          │
+      │  localStorage            │                          │
+      │  onAuthStateChange fires │                          │
+    </div>
+    <p class="diagram-caption">Figure 2 — Google OAuth 2.0 via Supabase Auth proxy</p>
+  </div>
+
+  <h3>Session token usage</h3>
+  <p>
+    After login, every call to a Supabase Edge Function includes the token in the
+    <code>Authorization</code> header:
+  </p>
+  <pre>Authorization: Bearer eyJhbGciOiJIUzI1NiIs...</pre>
+  <p>
+    The Edge Function passes this token to <code>supabase.auth.getUser(token)</code> to validate
+    it. If invalid or missing, the function returns <code>401 Unauthorized</code> immediately.
+  </p>
+
+  <h3>Logout flow</h3>
+  <p>
+    <code>Auth.signOut()</code> calls <code>supabase.auth.signOut()</code>, which clears the
+    stored JWT from <code>localStorage</code>. The <code>onAuthStateChange</code> <code>SIGNED_OUT</code>
+    event then shows the login screen.
+  </p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     4. SUPABASE LAYERS
+═══════════════════════════════════════════════════════════ -->
+<div class="section page-break" id="supabase-layers">
+  <h2>4. Supabase Layers</h2>
+
+  <p>
+    Supabase provides four distinct services that Dream Catcher uses. Each is accessed
+    differently and has its own security boundary.
+  </p>
+
+  <h3>4.1 Auth Service</h3>
+  <p>
+    Supabase Auth manages JWTs. The browser-side Supabase JS client handles token storage,
+    refresh, and forwarding. The JWT contains the user's <code>sub</code> (UUID), which
+    becomes <code>auth.uid()</code> inside PostgreSQL RLS policies.
+  </p>
+
+  <h3>4.2 PostgreSQL Database</h3>
+  <p>The database has two application tables:</p>
+
+  <h4>Table: <code>public.dreams</code></h4>
+  <table>
+    <tr><th>Column</th><th>Type</th><th>Description</th></tr>
+    <tr><td>id</td><td>VARCHAR / UUID</td><td>Entry ID, generated client-side</td></tr>
+    <tr><td>user_id</td><td>UUID</td><td>FK to <code>auth.users</code> — enforces ownership</td></tr>
+    <tr><td>date</td><td>DATE</td><td>Dream date (YYYY-MM-DD)</td></tr>
+    <tr><td>transcript</td><td>TEXT</td><td>Full dream text, cleaned by Claude</td></tr>
+    <tr><td>scenes</td><td>JSONB</td><td>Array of scene descriptions</td></tr>
+    <tr><td>style_key</td><td>VARCHAR</td><td>Visual style used for generation</td></tr>
+    <tr><td>created_at</td><td>TIMESTAMPTZ</td><td>ISO 8601 timestamp</td></tr>
+  </table>
+
+  <h4>Table: <code>public.profiles</code></h4>
+  <table>
+    <tr><th>Column</th><th>Type</th><th>Description</th></tr>
+    <tr><td>id</td><td>UUID</td><td>PK, FK to <code>auth.users</code></td></tr>
+    <tr><td>display_name</td><td>VARCHAR</td><td>Full name from Google</td></tr>
+    <tr><td>avatar_url</td><td>VARCHAR</td><td>Profile photo URL from Google</td></tr>
+    <tr><td>appearance_prompt</td><td>TEXT</td><td>User's visual appearance description (nullable)</td></tr>
+  </table>
+
+  <p>
+    The browser queries both tables using the Supabase REST API with the <em>anon key</em>.
+    All reads and writes are filtered by RLS policies (see Section 7).
+  </p>
+
+  <h3>4.3 Storage Bucket</h3>
+  <p>
+    All generated images are stored in the <code>dream-catcher-db</code> bucket.
+  </p>
+
+  <div class="diagram-wrapper">
+    <div class="diagram">
+ dream-catcher-db/
+   {user_id}/
+     {entry_id}/
+       scene-0.png      ← generated fresh (no reference)
+       scene-1.png      ← generated with scene-0 as reference
+       scene-2.png      ← generated with scene-0 as reference
+       ...
+    </div>
+  </div>
+
+  <table>
+    <tr><th>Operation</th><th>Who can do it</th><th>Auth method</th></tr>
+    <tr><td>Read (view images)</td><td>Anyone — bucket is public</td><td>No auth required</td></tr>
+    <tr><td>Write (upload images)</td><td>Edge Function only</td><td>Service Role Key (bypasses RLS)</td></tr>
+    <tr><td>Delete</td><td>Not currently exposed</td><td>—</td></tr>
+  </table>
+
+  <h3>4.4 Edge Functions Runtime</h3>
+  <p>
+    Edge Functions run in Supabase's managed Deno environment. They are deployed with the
+    Supabase CLI and execute on-demand. Each function is stateless — no shared memory
+    between invocations.
+  </p>
+
+  <p>Three functions are deployed:</p>
+  <ul>
+    <li><code>transcribe-audio</code> — audio-to-text via OpenAI Whisper</li>
+    <li><code>extract-scenes</code> — scene extraction via Anthropic Claude</li>
+    <li><code>generate-image</code> — image generation and storage upload via OpenAI</li>
+  </ul>
+
+  <p>
+    Each function is invoked via a POST request to
+    <code>https://&lt;project&gt;.supabase.co/functions/v1/&lt;name&gt;</code>.
+  </p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     5. EDGE FUNCTIONS IN DEPTH
+═══════════════════════════════════════════════════════════ -->
+<div class="section page-break" id="edge-functions">
+  <h2>5. Edge Functions in Depth</h2>
+
+  <p>
+    All three functions share a common pattern: validate the Supabase JWT, call an external
+    API using a secret key stored in the Supabase environment, and return a JSON response.
+  </p>
+
+  <div class="box box-note">
+    <strong>Common auth guard:</strong> Every function begins with:
+    <br /><code>const { data: { user } } = await supabase.auth.getUser(token)</code>
+    <br />If <code>user</code> is null, the function returns 401 and stops.
+  </div>
+
+  <!-- 5.1 ─────────────────────────────────────────────── -->
+  <h3>5.1 — <code>transcribe-audio</code></h3>
+  <p><strong>Purpose:</strong> Converts a voice recording into text using OpenAI Whisper.</p>
+
+  <table>
+    <tr><th>Input</th><td><code>multipart/form-data</code> with field <code>audio</code> (webm / m4a / ogg)</td></tr>
+    <tr><th>Output</th><td><code>{ "text": "I was walking through a forest..." }</code></td></tr>
+    <tr><th>External API</th><td>OpenAI <code>POST /v1/audio/transcriptions</code> — model: <code>whisper-1</code>, language: <code>en</code></td></tr>
+    <tr><th>Secret used</th><td><code>OPENAI_API_KEY</code></td></tr>
+    <tr><th>Error codes</th><td>401 no auth, 400 no audio file, 500 API failure</td></tr>
+  </table>
+
+  <div class="diagram-wrapper">
+    <div class="diagram">
+ Browser                    transcribe-audio              OpenAI Whisper
+    │                              │                           │
+    │  POST /functions/v1/         │                           │
+    │  transcribe-audio            │                           │
+    │  (FormData: audio file)      │                           │
+    │  Authorization: Bearer JWT   │                           │
+    │─────────────────────────────►│                           │
+    │                              │ validate JWT              │
+    │                              │ extract audio file        │
+    │                              │                           │
+    │                              │  POST /v1/audio/          │
+    │                              │  transcriptions           │
+    │                              │  model: whisper-1         │
+    │                              │─────────────────────────►│
+    │                              │  { "text": "..." }        │
+    │                              │◄─────────────────────────│
+    │  { "text": "..." }           │                           │
+    │◄─────────────────────────────│                           │
+    </div>
+    <p class="diagram-caption">Figure 3 — transcribe-audio call flow</p>
+  </div>
+
+  <!-- 5.2 ─────────────────────────────────────────────── -->
+  <h3>5.2 — <code>extract-scenes</code></h3>
+  <p><strong>Purpose:</strong> Uses Claude to extract up to 6 cinematic scenes from a dream
+  transcript and return a cleaned version of the text.</p>
+
+  <table>
+    <tr><th>Input</th><td><code>{ "transcript": "..." }</code></td></tr>
+    <tr><th>Output</th><td><code>{ "scenes": ["...", "..."], "cleanedTranscript": "..." }</code></td></tr>
+    <tr><th>External API</th><td>Anthropic Claude <code>POST /v1/messages</code> — model: <code>claude-opus-4-8</code></td></tr>
+    <tr><th>Secret used</th><td><code>CLAUDE_API_KEY</code></td></tr>
+    <tr><th>Max scenes</th><td>6 (Claude decides based on dream complexity)</td></tr>
+    <tr><th>Error codes</th><td>401 no auth, 400 no transcript, 500 API failure</td></tr>
+  </table>
+
+  <h4>Prompt structure</h4>
+  <pre>System: You are a visual storyteller and editor. Given a dream transcript, do two things:
+  1. Extract the most visually distinct scenes (up to 6). Each scene is one vivid
+     cinematic sentence describing setting, subject, light, and mood.
+  2. Rewrite the transcript in the dreamer's own voice — fix grammar and spelling
+     but preserve their perspective and content.
+  Return ONLY a valid JSON object with no markdown or code fences:
+  {"scenes": ["...", "..."], "cleanedTranscript": "..."}
+
+User: {transcript}</pre>
+
+  <div class="diagram-wrapper">
+    <div class="diagram">
+ Browser                    extract-scenes              Anthropic Claude
+    │                              │                           │
+    │  POST /functions/v1/         │                           │
+    │  extract-scenes              │                           │
+    │  { transcript: "..." }       │                           │
+    │  Authorization: Bearer JWT   │                           │
+    │─────────────────────────────►│                           │
+    │                              │ validate JWT              │
+    │                              │ build prompt              │
+    │                              │                           │
+    │                              │  POST /v1/messages        │
+    │                              │  model: claude-opus-4-8   │
+    │                              │─────────────────────────►│
+    │                              │  JSON: scenes + cleaned   │
+    │                              │◄─────────────────────────│
+    │  { scenes, cleanedTranscript}│                           │
+    │◄─────────────────────────────│                           │
+    </div>
+    <p class="diagram-caption">Figure 4 — extract-scenes call flow</p>
+  </div>
+
+  <!-- 5.3 ─────────────────────────────────────────────── -->
+  <h3 class="page-break">5.3 — <code>generate-image</code></h3>
+  <p><strong>Purpose:</strong> Generates a cinematic image for one scene and uploads it to
+  Supabase Storage. This function is called once per scene.</p>
+
+  <table>
+    <tr>
+      <th>Input</th>
+      <td>
+        <code>{ prompt, entryId, sceneIndex, appearancePrompt, referenceImageUrl? }</code>
+      </td>
+    </tr>
+    <tr><th>Output</th><td><code>{ "url": "https://...supabase.co/storage/v1/object/public/..." }</code></td></tr>
+    <tr><th>External API (scene 0)</th><td>OpenAI <code>POST /v1/images/generations</code> — model: <code>gpt-image-1</code>, 1024×1024, quality: low</td></tr>
+    <tr><th>External API (scenes 1+)</th><td>OpenAI <code>POST /v1/images/edits</code> — same model, uses scene-0 as visual reference</td></tr>
+    <tr><th>Secrets used</th><td><code>OPENAI_API_KEY</code>, <code>SUPABASE_SERVICE_ROLE_KEY</code></td></tr>
+    <tr><th>Error codes</th><td>401 no auth, 400 missing params, 500 API/upload failure</td></tr>
+  </table>
+
+  <h4>Prompt construction (inside the function)</h4>
+  <pre>final_prompt = {scene}
+             + {appearancePrompt}
+             + {style.suffix}</pre>
+
+  <p>
+    The <code>style.suffix</code> is a multi-sentence cinematic descriptor defined in <code>api.js</code>
+    under the <code>STYLES</code> object. It covers lighting, camera style, artistic mood, and
+    negative constraints specific to the chosen visual style.
+  </p>
+
+  <h4>Reference image strategy</h4>
+  <p>
+    Scene 0 is always generated fresh (no reference). All subsequent scenes pass scene 0's
+    image as <code>referenceImageUrl</code> and use the <code>/v1/images/edits</code> endpoint with
+    <code>input_fidelity: high</code>. This maintains character and visual consistency across
+    the full dream sequence.
+  </p>
+
+  <div class="diagram-wrapper">
+    <div class="diagram">
+ Browser         generate-image              OpenAI             Supabase Storage
+    │                   │                      │                       │
+    │ scene 0 ─────────►│                      │                       │
+    │ (no reference)     │  POST /images/       │                       │
+    │                   │  generations         │                       │
+    │                   │─────────────────────►│                       │
+    │                   │  base64 PNG          │                       │
+    │                   │◄─────────────────────│                       │
+    │                   │  decode + upload     │                       │
+    │                   │  (service role key)  │                       │
+    │                   │─────────────────────────────────────────────►│
+    │                   │                      │   public URL          │
+    │                   │◄─────────────────────────────────────────────│
+    │  { url: "..." } ◄─│                      │                       │
+    │                   │                      │                       │
+    │ scene 1+ ────────►│                      │                       │
+    │ (reference=scene0) │ POST /images/edits  │                       │
+    │                   │ input: scene-0 image │                       │
+    │                   │─────────────────────►│                       │
+    │                   │  base64 PNG          │                       │
+    │                   │◄─────────────────────│                       │
+    │                   │  upload              │                       │
+    │                   │─────────────────────────────────────────────►│
+    │  { url: "..." } ◄─│                      │   public URL          │
+    </div>
+    <p class="diagram-caption">Figure 5 — generate-image call flow (scene 0 vs scenes 1+)</p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     6. FULL API CALL JOURNEY
+═══════════════════════════════════════════════════════════ -->
+<div class="section page-break" id="api-journey">
+  <h2>6. Full API Call Journey</h2>
+
+  <p>
+    This section traces a complete dream recording session from microphone tap to rendered
+    notebook page.
+  </p>
+
+  <div class="diagram-wrapper">
+    <div class="diagram">
+ ┌─────────────────────────────────────────────────────────────────────────────┐
+ │               COMPLETE DREAM RECORDING SESSION                              │
+ └─────────────────────────────────────────────────────────────────────────────┘
+
+ PHASE 1 — RECORD
+ ─────────────────
+ User taps Record
+   └► MediaRecorder starts (browser mic)
+   └► Audio chunks accumulate in memory
+
+ User taps Stop
+   └► Blob assembled (webm/m4a/ogg)
+   └► POST /functions/v1/transcribe-audio  [FormData: audio]
+       └► Supabase validates JWT
+       └► OpenAI Whisper → raw transcript text
+       └► Returns { text: "..." }
+   └► Text displayed in bottom sheet for review
+
+ PHASE 2 — EXTRACT
+ ──────────────────
+ User taps Visualize
+   └► generateEntryId() → UUID stored in state.currentEntryId
+   └► POST /functions/v1/extract-scenes  [{ transcript }]
+       └► Supabase validates JWT
+       └► Claude claude-opus-4-8 extracts 1-6 scenes + cleans transcript
+       └► Returns { scenes: [...], cleanedTranscript: "..." }
+   └► Scenes stored in state.currentScenes
+
+ PHASE 3 — STYLE SELECTION
+ ──────────────────────────
+ First-time user:
+   └► 5 parallel image generations (one per style, scene[0] only)
+       └► User sees 5 preview cards, picks a style
+       └► Preference saved to localStorage: 'preferredDreamStyle'
+
+ Returning user:
+   └► Read preferredDreamStyle from localStorage → skip picker
+
+ PHASE 4 — IMAGE GENERATION (per scene, sequential)
+ ───────────────────────────────────────────────────
+ For scene 0:
+   └► buildPrompt(scene[0], styleKey, appearancePrompt)
+   └► POST /functions/v1/generate-image  [{ prompt, entryId, sceneIndex: 0 }]
+       └► Supabase validates JWT
+       └► OpenAI gpt-image-1  POST /v1/images/generations
+       └► Base64 PNG decoded
+       └► Uploaded to Storage: dream-catcher-db/{userId}/{entryId}/scene-0.png
+          (using service role key — bypasses RLS)
+       └► Returns { url: "https://...scene-0.png" }
+
+ For each remaining scene (1, 2, 3...):
+   └► POST /functions/v1/generate-image  [{ ..., sceneIndex: i, referenceImageUrl: scene0url }]
+       └► OpenAI gpt-image-1  POST /v1/images/edits  (scene-0 as reference)
+       └► Upload to Storage: dream-catcher-db/{userId}/{entryId}/scene-N.png
+       └► Returns { url: "https://...scene-N.png" }
+
+ PHASE 5 — PERSIST
+ ──────────────────
+ After last image resolves:
+   └► DB.saveDream({ id, user_id, date, transcript, scenes, style_key, created_at })
+       └► Supabase REST API  UPSERT into dreams table
+          (anon key + RLS: user can only write own rows)
+   └► Dream appears in home feed and calendar
+    </div>
+    <p class="diagram-caption">Figure 6 — Complete API call journey for a dream session</p>
+  </div>
+
+  <h3>Browser-side call chain (code layer)</h3>
+  <pre>app.js: stopRecording()
+  └► api.js: transcribeAudio(blob, mimeType)
+       └► fetch(SUPABASE_URL + '/functions/v1/transcribe-audio', { FormData })
+
+app.js: startVisualization(transcript)
+  └► api.js: extractScenes(transcript)
+       └► _callEdgeFunction('extract-scenes', { transcript })
+  └► app.js: generateSceneRange(scenes, 0, styleKey, appearancePrompt)
+       └── for each scene i:
+           └► api.js: generateImage(scene, styleKey, entryId, i, appearance, refUrl)
+                └► _callEdgeFunction('generate-image', { prompt, entryId, sceneIndex, ... })
+  └► db.js: saveDream(entry)
+       └► supabase.from('dreams').upsert({ ... })</pre>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     7. DATABASE SECURITY & RLS
+═══════════════════════════════════════════════════════════ -->
+<div class="section page-break" id="db-security">
+  <h2>7. Database Security &amp; Row-Level Security</h2>
+
+  <p>
+    The Supabase anon key is visible in <code>config.js</code> (a public file). This is safe
+    because Row-Level Security (RLS) policies enforce data isolation at the database level —
+    not the application level. Even if someone extracts the anon key, they can only access
+    data that the policies permit.
+  </p>
+
+  <h3>How RLS works</h3>
+  <p>
+    PostgreSQL evaluates RLS policies before returning or modifying any row. The
+    <code>auth.uid()</code> function returns the UUID from the current JWT. If no valid JWT
+    is present, <code>auth.uid()</code> returns null, which matches no <code>user_id</code>.
+  </p>
+
+  <h3>RLS policies</h3>
+
+  <h4><code>dreams</code> table</h4>
+  <table>
+    <tr><th>Operation</th><th>Policy condition</th><th>Effect</th></tr>
+    <tr><td>SELECT</td><td><code>auth.uid() = user_id</code></td><td>Users see only their own dreams</td></tr>
+    <tr><td>INSERT</td><td><code>auth.uid() = user_id</code></td><td>Users can only create rows for themselves</td></tr>
+    <tr><td>UPDATE</td><td><code>auth.uid() = user_id</code></td><td>Users can only edit their own dreams</td></tr>
+    <tr><td>DELETE</td><td><code>auth.uid() = user_id</code></td><td>Users can only delete their own dreams</td></tr>
+  </table>
+
+  <h4><code>profiles</code> table</h4>
+  <table>
+    <tr><th>Operation</th><th>Policy condition</th><th>Effect</th></tr>
+    <tr><td>SELECT</td><td>No restriction (public)</td><td>Any authenticated user can read profiles (needed for shared feed)</td></tr>
+    <tr><td>INSERT</td><td><code>auth.uid() = id</code></td><td>Users can only create their own profile row</td></tr>
+    <tr><td>UPDATE</td><td><code>auth.uid() = id</code></td><td>Users can only update their own profile</td></tr>
+  </table>
+
+  <h3>Shared feed — reading other users' dreams</h3>
+  <p>
+    <code>DB.getAllDreams(limit)</code> fetches dreams from all users, which requires the
+    <code>dreams</code> SELECT policy to allow cross-user reads. In practice this means the
+    policy must either be relaxed for SELECT or the query uses a server-side role. This is
+    the one area where RLS policy design has a trade-off between isolation and social features.
+  </p>
+
+  <div class="box box-warn">
+    <strong>Trade-off to note:</strong> Enabling public SELECT on the <code>dreams</code> table
+    (to power the shared feed) means all dreams are visible to any authenticated user.
+    If private dreams are needed in the future, a <code>is_public</code> flag and an updated
+    RLS policy would gate visibility.
+  </div>
+
+  <h3>Storage security</h3>
+  <p>
+    The <code>dream-catcher-db</code> bucket is configured as <em>public</em>. Image URLs are
+    shared openly in the feed without requiring auth tokens. Writes are blocked for the anon
+    key — only the service role key (held only in Edge Functions) can upload.
+  </p>
+
+  <h3>Key access matrix</h3>
+  <table>
+    <tr><th>Key</th><th>Where stored</th><th>What it can do</th><th>RLS enforced?</th></tr>
+    <tr>
+      <td>Anon Key</td>
+      <td><code>config.js</code> (browser)</td>
+      <td>Query DB, auth flows</td>
+      <td>Yes — full RLS applies</td>
+    </tr>
+    <tr>
+      <td>Service Role Key</td>
+      <td>Supabase Edge Function secrets</td>
+      <td>Upload to Storage, full DB access</td>
+      <td>No — bypasses RLS</td>
+    </tr>
+    <tr>
+      <td>Claude API Key</td>
+      <td>Supabase Edge Function secrets</td>
+      <td>Call Anthropic API</td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td>OpenAI API Key</td>
+      <td>Supabase Edge Function secrets</td>
+      <td>Call Whisper + gpt-image-1</td>
+      <td>N/A</td>
+    </tr>
+  </table>
+
+  <div class="box box-secure">
+    <strong>Security guarantee:</strong> API keys (Claude, OpenAI) never leave Supabase's
+    server environment. The browser receives only final outputs — transcribed text, extracted
+    scenes, and public image URLs.
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     8. SECRETS & ENVIRONMENT VARIABLES
+═══════════════════════════════════════════════════════════ -->
+<div class="section" id="secrets">
+  <h2>8. Secrets &amp; Environment Variables</h2>
+
+  <h3>Browser-visible (config.js)</h3>
+  <p>
+    These are intentionally public. The anon key is a read-only credential with RLS enforced.
+  </p>
+  <pre>SUPABASE_URL      = "https://[project-id].supabase.co"
+SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIs..."   // public, safe to expose</pre>
+
+  <h3>Edge Function secrets (never browser-visible)</h3>
+  <p>
+    Set via <code>supabase secrets set KEY=value</code> and stored encrypted in Supabase's
+    secret management. Injected as environment variables into the Deno runtime at invocation.
+  </p>
+  <table>
+    <tr><th>Variable</th><th>Used by</th><th>Purpose</th></tr>
+    <tr><td><code>OPENAI_API_KEY</code></td><td>transcribe-audio, generate-image</td><td>Authenticate to OpenAI (Whisper + gpt-image-1)</td></tr>
+    <tr><td><code>CLAUDE_API_KEY</code></td><td>extract-scenes</td><td>Authenticate to Anthropic Claude</td></tr>
+    <tr><td><code>SUPABASE_SERVICE_ROLE_KEY</code></td><td>generate-image</td><td>Upload images to Storage (bypasses RLS)</td></tr>
+    <tr><td><code>SUPABASE_URL</code></td><td>All three functions</td><td>Connect to Supabase for auth validation</td></tr>
+    <tr><td><code>SUPABASE_ANON_KEY</code></td><td>All three functions</td><td>Create Supabase client for auth.getUser()</td></tr>
+  </table>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     9. INTEGRATION SUMMARY TABLE
+═══════════════════════════════════════════════════════════ -->
+<div class="section page-break" id="summary">
+  <h2>9. Integration Summary</h2>
+
+  <table>
+    <tr>
+      <th>Service</th>
+      <th>Function</th>
+      <th>Model / Endpoint</th>
+      <th>Called from</th>
+      <th>Auth</th>
+    </tr>
+    <tr>
+      <td>Supabase Auth</td>
+      <td>Login / session</td>
+      <td>Google OAuth 2.0 proxy</td>
+      <td>auth.js (browser)</td>
+      <td>Google account</td>
+    </tr>
+    <tr>
+      <td>Supabase Postgres</td>
+      <td>Store dreams + profiles</td>
+      <td>REST API (<code>dreams</code>, <code>profiles</code>)</td>
+      <td>db.js (browser)</td>
+      <td>Anon key + RLS</td>
+    </tr>
+    <tr>
+      <td>Supabase Storage</td>
+      <td>Host generated images</td>
+      <td><code>dream-catcher-db</code> bucket</td>
+      <td>generate-image (Edge Fn)</td>
+      <td>Service Role Key</td>
+    </tr>
+    <tr>
+      <td>Anthropic Claude</td>
+      <td>Scene extraction</td>
+      <td><code>claude-opus-4-8</code></td>
+      <td>extract-scenes (Edge Fn)</td>
+      <td><code>CLAUDE_API_KEY</code></td>
+    </tr>
+    <tr>
+      <td>OpenAI Whisper</td>
+      <td>Audio transcription</td>
+      <td><code>whisper-1</code></td>
+      <td>transcribe-audio (Edge Fn)</td>
+      <td><code>OPENAI_API_KEY</code></td>
+    </tr>
+    <tr>
+      <td>OpenAI Images</td>
+      <td>Image generation</td>
+      <td><code>gpt-image-1</code> (generations + edits)</td>
+      <td>generate-image (Edge Fn)</td>
+      <td><code>OPENAI_API_KEY</code></td>
+    </tr>
+  </table>
+
+  <hr />
+
+  <h3>Request path summary</h3>
+  <div class="diagram-wrapper">
+    <div class="diagram">
+ TRANSCRIPTION
+   Browser mic → Blob → transcribe-audio (Edge Fn) → Whisper → text
+
+ SCENE EXTRACTION
+   Transcript → extract-scenes (Edge Fn) → Claude → scenes + cleaned text
+
+ IMAGE GENERATION (per scene)
+   Scene + style → generate-image (Edge Fn) → gpt-image-1 → PNG → Storage → URL
+
+ DATABASE READS
+   Browser → Supabase REST API (anon key + RLS) → dreams / profiles
+
+ DATABASE WRITES
+   Browser → Supabase REST API (anon key + RLS) → dreams / profiles
+   Storage writes → Service Role Key (Edge Fn only)
+
+ AUTH
+   Browser → Supabase Auth → Google OAuth → JWT → stored in localStorage
+    </div>
+    <p class="diagram-caption">Figure 7 — All request paths at a glance</p>
+  </div>
+
+  <h3>File-to-responsibility map</h3>
+  <table>
+    <tr><th>File</th><th>Responsibility</th></tr>
+    <tr><td><code>index.html</code></td><td>App shell — login screen + main layout</td></tr>
+    <tr><td><code>style.css</code></td><td>All visual styling (dark cinematic theme)</td></tr>
+    <tr><td><code>config.js</code></td><td>Supabase URL and anon key (public)</td></tr>
+    <tr><td><code>auth.js</code></td><td>Google OAuth, session management, auth state changes</td></tr>
+    <tr><td><code>db.js</code></td><td>All Supabase DB and Storage operations</td></tr>
+    <tr><td><code>api.js</code></td><td>Edge Function callers, style definitions, prompt builder</td></tr>
+    <tr><td><code>app.js</code></td><td>Orchestration, state machine, UI rendering</td></tr>
+    <tr><td><code>avatars.js</code></td><td>SVG avatar generation per user</td></tr>
+    <tr><td><code>logger.js</code></td><td>Session logging to localStorage for debug view</td></tr>
+    <tr><td><code>imagestore.js</code></td><td>IndexedDB wrapper (defined, not actively used)</td></tr>
+    <tr><td><code>netlify.toml</code></td><td>Netlify static hosting config + security headers</td></tr>
+    <tr><td><code>supabase/functions/transcribe-audio/</code></td><td>Deno: Whisper audio transcription</td></tr>
+    <tr><td><code>supabase/functions/extract-scenes/</code></td><td>Deno: Claude scene extraction</td></tr>
+    <tr><td><code>supabase/functions/generate-image/</code></td><td>Deno: gpt-image-1 generation + storage upload</td></tr>
+  </table>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════
+     EXPLAINER: THE WHY BEHIND THE HOW
+═══════════════════════════════════════════════════════════ -->
+
+<div class="explainer-cover page-break">
+  <p class="explainer-label">Part II</p>
+  <h1 class="explainer-title">The Why Behind the How</h1>
+  <p class="explainer-sub">A deep technical explainer — how every layer of this system actually works, from first principles, with every new term defined as it appears.</p>
+</div>
+
+<style>
+  .explainer-cover {
+    text-align: center;
+    padding: 80px 0 60px;
+    border-top: 2px solid #1a1a1a;
+    border-bottom: 2px solid #1a1a1a;
+    margin-top: 60px;
+    margin-bottom: 56px;
+  }
+  .explainer-label {
+    font-size: 11pt;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+  .explainer-title {
+    font-size: 26pt;
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+  .explainer-sub {
+    font-size: 12pt;
+    color: #555;
+    font-style: italic;
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+  .explainer-chapter {
+    border-left: 4px solid #1a1a1a;
+    padding-left: 18px;
+    margin: 48px 0 28px;
+  }
+  .explainer-chapter .chapter-num {
+    font-size: 9.5pt;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #888;
+    margin-bottom: 4px;
+  }
+  .explainer-chapter h2 {
+    border: none;
+    margin-top: 0;
+    padding-bottom: 0;
+    font-size: 16pt;
+  }
+  .term {
+    font-weight: 700;
+    border-bottom: 1.5px dotted #888;
+  }
+  .analogy {
+    background: #f9f6f0;
+    border-left: 4px solid #c8a84b;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-style: italic;
+    font-size: 10.5pt;
+    border-radius: 0 3px 3px 0;
+  }
+  .step-block {
+    margin: 20px 0;
+    padding-left: 0;
+  }
+  .step-block .step {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 14px;
+    align-items: flex-start;
+  }
+  .step-block .step-num {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 9.5pt;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    font-family: 'Courier New', monospace;
+  }
+  .step-block .step-text {
+    flex: 1;
+    font-size: 11pt;
+    line-height: 1.65;
+  }
+  .callout-q {
+    background: #f0f4ff;
+    border: 1px solid #c0cff0;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 10.5pt;
+  }
+  .callout-q strong { display: block; margin-bottom: 4px; color: #2a4ab5; }
+</style>
+
+<!-- ════════════════════════════════════════════════════════
+     CHAPTER 1 — HTTPS
+═══════════════════════════════════════════════════════════ -->
+<div class="section" id="explainer-https">
+  <div class="explainer-chapter">
+    <p class="chapter-num">Chapter 1</p>
+    <h2>The Foundation — How HTTPS Keeps Everything Private</h2>
+  </div>
+
+  <p>
+    Before we can understand how Google sign-in works, or how your JWT travels safely, or
+    why your API keys can't be stolen in transit, we need to understand one thing that
+    underlies all of it: HTTPS and TLS.
+  </p>
+
+  <p>
+    When you type a URL and hit enter, your request travels as electrical signals and radio
+    waves through cables, routers, and wireless networks before it reaches any server. Those
+    signals pass through infrastructure owned by your ISP (Internet Service Provider — the
+    company providing your internet connection), data centers, and sometimes hardware owned
+    by unknown parties. Without protection, anyone with access to any intermediate point
+    could read your data in plain text, or modify it before it reaches you.
+  </p>
+
+  <p>
+    <span class="term">HTTPS</span> stands for HyperText Transfer Protocol Secure. The
+    "Secure" part means the connection is encrypted using a protocol called
+    <span class="term">TLS</span> — Transport Layer Security. TLS is a cryptographic
+    handshake that happens before any real data is exchanged.
+  </p>
+
+  <h3>The TLS Handshake — what happens in the first 100 milliseconds</h3>
+
+  <div class="step-block">
+    <div class="step">
+      <span class="step-num">1</span>
+      <span class="step-text"><strong>Your browser says hello.</strong> It sends a "ClientHello" message listing the encryption algorithms it supports and a random number it just generated.</span>
+    </div>
+    <div class="step">
+      <span class="step-num">2</span>
+      <span class="step-text"><strong>The server responds.</strong> It sends back its chosen encryption algorithm, another random number, and most importantly — its <span class="term">SSL certificate</span>.</span>
+    </div>
+    <div class="step">
+      <span class="step-num">3</span>
+      <span class="step-text"><strong>Your browser checks the certificate.</strong> An SSL certificate is a digital document that says: "This server is really [project-id].supabase.co, and here is a cryptographic proof signed by a trusted authority." Your browser has a pre-installed list of trusted authorities — called <span class="term">Certificate Authorities (CAs)</span> — like DigiCert, Let's Encrypt, and Comodo. If the certificate is signed by one of them, and the domain matches, the browser trusts it.</span>
+    </div>
+    <div class="step">
+      <span class="step-num">4</span>
+      <span class="step-text"><strong>They agree on a shared secret.</strong> Using a technique called <span class="term">key exchange</span>, the browser and server mathematically derive the same encryption key — without ever transmitting that key across the network. This sounds impossible but is the fundamental magic of modern cryptography. The algorithm most commonly used is called Diffie-Hellman key exchange.</span>
+    </div>
+    <div class="step">
+      <span class="step-num">5</span>
+      <span class="step-text"><strong>All further communication is encrypted.</strong> Every byte from this point — the HTTP request, the response, the headers, everything — is scrambled using that shared key. Anyone intercepting the traffic sees only random-looking noise.</span>
+    </div>
+  </div>
+
+  <div class="analogy">
+    Think of it like this: you and a stranger need to agree on a secret password in a public
+    place where anyone can overhear you. You each pick a secret number, do some math with a
+    shared public number, exchange the result out loud, and each do some more private math
+    with your secret number. You both arrive at the same final value — and no one listening
+    can figure it out from what was said publicly. That's Diffie-Hellman in plain English.
+  </div>
+
+  <p>
+    This is the foundation that makes everything else safe. When the rest of this document
+    says "the request travels over HTTPS," it means this entire mechanism is in place for
+    every single request — auth codes, JWTs, database queries, API calls, image uploads.
+    No one in the middle can read or modify any of it.
+  </p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     CHAPTER 2 — GOOGLE SIGN-IN
+═══════════════════════════════════════════════════════════ -->
+<div class="section page-break" id="explainer-oauth">
+  <div class="explainer-chapter">
+    <p class="chapter-num">Chapter 2</p>
+    <h2>Google Sign-In — What Actually Happens, Step by Step</h2>
+  </div>
+
+  <p>
+    The protocol behind "Sign in with Google" is called <span class="term">OAuth 2.0</span>
+    — an open standard for letting one application (Dream Catcher) ask another application
+    (Google) to confirm a user's identity, without Dream Catcher ever seeing the user's
+    Google password. Supabase acts as the middleman, handling the OAuth dance so the browser
+    JavaScript never has to manage raw tokens.
+  </p>
+
+  <h3>Step 1 — The button click triggers a redirect</h3>
+
+  <p>
+    When you click "Sign in with Google," <code>auth.js</code> calls
+    <code>supabase.auth.signInWithOAuth({ provider: 'google' })</code>. The Supabase SDK
+    constructs a URL and redirects your browser to it. That URL is at Google's servers and
+    looks roughly like this:
+  </p>
+
+  <pre>https://accounts.google.com/o/oauth2/v2/auth
+  ?client_id=123456789.apps.googleusercontent.com
+  &redirect_uri=https://[project-id].supabase.co/auth/v1/callback
+  &response_type=code
+  &scope=email+profile
+  &state=xK9zPm2qRs...</pre>
+
+  <p>Let's break down every parameter:</p>
+
+  <ul>
+    <li><strong>client_id</strong> — Dream Catcher's identifier with Google. When the app was registered in Google Cloud Console, Google assigned this ID. It's public — knowing this ID doesn't help an attacker.</li>
+    <li><strong>redirect_uri</strong> — After Google finishes, send the user back to this URL. Notice it points to <em>Supabase</em>, not Netlify. We'll come back to why.</li>
+    <li><strong>response_type=code</strong> — Don't give us the actual token yet. Give us a short-lived code first. This is the "Authorization Code Flow" — the safest OAuth variant, explained below.</li>
+    <li><strong>scope</strong> — What access we're requesting. <code>email profile</code> means we want to see the user's name and email — nothing else.</li>
+    <li><strong>state</strong> — A random string the SDK generated. Google will include it unchanged in the callback. The SDK checks it matches — this proves the callback is in response to a flow this app actually started, not a forged response planted by an attacker.</li>
+  </ul>
+
+  <h3>Step 2 — What Google checks</h3>
+
+  <p>Your browser is now fully on Google's servers. Google renders its consent screen. Meanwhile, Google is checking:</p>
+
+  <ul>
+    <li>Does the <code>client_id</code> match a registered app?</li>
+    <li>Does the <code>redirect_uri</code> exactly match one of the pre-approved URIs for that app? If someone tries to swap in a malicious URL here, Google refuses. This is registered in Google Cloud Console when the app is first set up.</li>
+    <li>Is the user signed in to Google? If not, Google asks them to log in first.</li>
+  </ul>
+
+  <p>
+    When you click "Allow," Google generates an <span class="term">authorization code</span>
+    — a random string, single-use, valid for about 60 seconds. Google redirects your browser
+    to the <code>redirect_uri</code>:
+  </p>
+
+  <pre>https://[project-id].supabase.co/auth/v1/callback
+  ?code=4/0AX4XfWh3k9z...
+  &state=xK9zPm2qRs...</pre>
+
+  <div class="callout-q">
+    <strong>Why a code instead of the actual token?</strong>
+    The redirect URL appears in your browser address bar, in server logs, in browser history,
+    and potentially leaks through the HTTP Referer header. A full token in a URL is a security
+    hole — it can be logged anywhere. An authorization code is useless on its own: it must be
+    exchanged for a token by something that also knows the <em>client secret</em>, which the
+    browser never has. The code is just a one-time claim ticket.
+  </div>
+
+  <h3>Step 3 — Supabase completes the token exchange (the browser watches but can't participate)</h3>
+
+  <p>
+    Supabase's auth servers receive that callback redirect. Now Supabase makes a
+    <em>server-to-server</em> call directly to Google — no browser involved:
+  </p>
+
+  <pre>POST https://oauth2.googleapis.com/token
+  code=4/0AX4XfWh3k9z...
+  client_id=123456789.apps.googleusercontent.com
+  client_secret=GOCSPX-...           ← secret, stored only in Supabase
+  redirect_uri=https://...supabase.co/auth/v1/callback
+  grant_type=authorization_code</pre>
+
+  <p>
+    The <code>client_secret</code> is what proves to Google that this request is genuinely
+    from Dream Catcher's backend, not from an impostor who intercepted the code. This secret
+    lives only in Supabase's server configuration — it was never in the browser, never in
+    your HTML files, never in your JavaScript.
+  </p>
+
+  <p>Google responds with three tokens:</p>
+
+  <ul>
+    <li><strong>access_token</strong> — A short-lived credential that lets Supabase call Google APIs to fetch your profile (name, email, photo).</li>
+    <li><strong>refresh_token</strong> — A long-lived credential that lets Supabase get new access tokens without asking you to log in again.</li>
+    <li><strong>id_token</strong> — A JWT (explained in the next chapter) that contains your Google identity: who you are, your email, and a signature proving Google issued it.</li>
+  </ul>
+
+  <p>
+    Supabase uses the access token to call <code>https://www.googleapis.com/oauth2/v3/userinfo</code>
+    and get your name, email, and profile photo. Then Supabase creates or updates an entry
+    for you in its own <code>auth.users</code> table and issues its own JWT — the
+    <span class="term">Supabase session token</span> — signed with Supabase's own secret key.
+  </p>
+
+  <h3>Step 4 — The token returns to the browser, safely</h3>
+
+  <p>
+    Supabase now redirects the browser back to the app — specifically to the
+    <code>redirectTo</code> URL originally passed (the Netlify site URL). The Supabase
+    session token is attached as a <span class="term">URL fragment</span>:
+  </p>
+
+  <pre>https://your-app.netlify.app/#access_token=eyJhbGciOiJIUzI1NiIs...&token_type=bearer&...</pre>
+
+  <p>
+    The <code>#</code> symbol marks a <span class="term">fragment</span>. Fragments are
+    fundamentally different from query parameters (which come after <code>?</code>). When your
+    browser makes an HTTP request, the server receives the path and query string but
+    <em>never</em> the fragment — the browser strips it before sending. Netlify's servers
+    never see the token. Only the JavaScript running in your browser tab can read it.
+  </p>
+
+  <p>
+    The Supabase JS SDK detects the fragment on page load, extracts the token, stores it in
+    <code>localStorage</code>, and fires <code>onAuthStateChange</code> with a
+    <code>SIGNED_IN</code> event. <code>auth.js</code> receives that event and shows the
+    home screen.
+  </p>
+
+  <h3>Could anyone intercept any of this?</h3>
+
+  <ul>
+    <li><strong>Intercept the initial redirect to Google?</strong> It's over HTTPS — scrambled in transit. Even if intercepted, it only contains the public client_id and the one-time state parameter.</li>
+    <li><strong>Steal the authorization code from the callback?</strong> The callback URL goes to Supabase, not the browser's origin, so no cross-origin script can read it. The code itself is useless without the client secret.</li>
+    <li><strong>Read the Supabase JWT from the fragment?</strong> Fragments are never transmitted to servers, so they can't be captured in server logs. On the same machine, the token lives in localStorage — protected by the browser's same-origin policy, meaning only scripts from the same domain can read it.</li>
+    <li><strong>Forge the state parameter?</strong> It's a cryptographically random string generated fresh each time. An attacker cannot guess it or predict it.</li>
+  </ul>
+
+  <div class="diagram-wrapper">
+    <div class="diagram">
+ Browser                  Supabase Auth                Google
+    │                          │                          │
+    │ signInWithOAuth()         │                          │
+    │─────────────────────────►│                          │
+    │     redirect to Google   │                          │
+    │◄─────────────────────────│                          │
+    │                                                     │
+    │──────────── browser navigates to Google ───────────►│
+    │                                                     │ checks credentials
+    │                                                     │ shows consent screen
+    │◄──────────────── redirect + auth code ──────────────│
+    │                          │                          │
+    │───── callback hits Supabase (not browser) ─────────►│
+    │                          │  code + client_secret    │
+    │                          │─────────────────────────►│
+    │                          │    access_token + JWT    │
+    │                          │◄─────────────────────────│
+    │                          │  fetch user profile      │
+    │                          │─────────────────────────►│
+    │                          │  { name, email, photo }  │
+    │                          │◄─────────────────────────│
+    │                          │  issue Supabase JWT      │
+    │◄── redirect back to app  │                          │
+    │    with JWT in #fragment  │                          │
+    │                          │                          │
+    │  SDK reads fragment,      │                          │
+    │  stores in localStorage  │                          │
+    │  onAuthStateChange fires  │                          │
+    </div>
+    <p class="diagram-caption">Figure 8 — Google OAuth 2.0 full flow with Supabase as auth proxy</p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     CHAPTER 3 — JWTs
+═══════════════════════════════════════════════════════════ -->
+<div class="section page-break" id="explainer-jwt">
+  <div class="explainer-chapter">
+    <p class="chapter-num">Chapter 3</p>
+    <h2>What Is a JWT and How Does Verification Work?</h2>
+  </div>
+
+  <p>
+    Every time Dream Catcher calls a Supabase Edge Function, it includes a token in the
+    request header. That token is a <span class="term">JWT</span> — JSON Web Token, pronounced
+    "jot." Understanding what a JWT is and how it's verified is key to understanding why Edge
+    Functions trust it without calling Google or doing a database lookup.
+  </p>
+
+  <h3>Structure — three parts separated by dots</h3>
+
+  <p>A JWT looks like this:</p>
+
+  <pre>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+.eyJzdWIiOiJhMWIyYzNkNC0uLi4iLCJlbWFpbCI6ImhhcnByZWV0QC4uLiIsInJvbGUiOiJhdXRoZW50aWNhdGVkIiwiaWF0IjoxNzE4MDAwMDAwLCJleHAiOjE3MTgwMDM2MDB9
+.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</pre>
+
+  <p>
+    Three parts, each Base64-encoded (a way of converting binary data into printable ASCII
+    characters so it can travel inside HTTP headers without corruption). Decode them and you get:
+  </p>
+
+  <h4>Part 1 — Header</h4>
+  <pre>{
+  "alg": "HS256",    // the signing algorithm: HMAC-SHA256
+  "typ": "JWT"       // this is a JWT
+}</pre>
+
+  <h4>Part 2 — Payload (the claims)</h4>
+  <pre>{
+  "sub":   "a1b2c3d4-e5f6-...",   // subject: the user's UUID
+  "email": "you@example.com",
+  "role":  "authenticated",
+  "iat":   1718000000,             // issued at (Unix epoch: seconds since Jan 1 1970)
+  "exp":   1718003600              // expires at (1 hour later)
+}</pre>
+
+  <h4>Part 3 — Signature</h4>
+  <p>
+    The signature is computed by Supabase's servers at the moment the token is created:
+  </p>
+  <pre>HMAC_SHA256(
+  key    = SUPABASE_JWT_SECRET,        // a secret only Supabase knows
+  data   = base64(header) + "." + base64(payload)
+)</pre>
+
+  <p>
+    <span class="term">HMAC-SHA256</span> is a cryptographic function. Given the same key
+    and data, it always produces the same output — a fixed-length string of bytes. Change
+    even one character in the data, and the output changes completely and unpredictably.
+  </p>
+
+  <h3>How an Edge Function verifies a JWT — no database lookup needed</h3>
+
+  <p>When <code>generate-image</code> receives a request with a JWT, it does this:</p>
+
+  <div class="step-block">
+    <div class="step">
+      <span class="step-num">1</span>
+      <span class="step-text">Split the token on the two dots. Extract header, payload, and signature.</span>
+    </div>
+    <div class="step">
+      <span class="step-num">2</span>
+      <span class="step-text">Run <code>HMAC_SHA256(SUPABASE_JWT_SECRET, header + "." + payload)</code>. The Supabase JWT secret is injected into the Edge Function's environment — it's the same secret Supabase used when the token was created.</span>
+    </div>
+    <div class="step">
+      <span class="step-num">3</span>
+      <span class="step-text">Compare the result to the signature in the token. If they match: the payload is authentic and untampered. If they don't match: the token was forged or modified. Reject with 401.</span>
+    </div>
+    <div class="step">
+      <span class="step-num">4</span>
+      <span class="step-text">Check the <code>exp</code> claim. If the current time is past the expiry: reject with 401. The Supabase SDK in the browser silently refreshes tokens before they expire using a refresh token, so legitimate users never notice this.</span>
+    </div>
+    <div class="step">
+      <span class="step-num">5</span>
+      <span class="step-text">Read the <code>sub</code> claim to get the user's UUID. This UUID is now trusted — it was baked into the token by Supabase and cannot be changed without invalidating the signature.</span>
+    </div>
+  </div>
+
+  <div class="callout-q">
+    <strong>Why is this faster than a database lookup?</strong>
+    Verifying a JWT is pure math — a local computation that takes microseconds. A database
+    lookup means a network call, query execution, and waiting for a response. For an Edge
+    Function that might run thousands of times per minute, the difference is significant.
+    JWTs were designed precisely so authorization checks can be stateless and local.
+  </div>
+
+  <h3>What happens if someone tampers with the payload?</h3>
+
+  <p>
+    Suppose an attacker receives a legitimate JWT and tries to change the <code>sub</code>
+    field to another user's UUID. They can Base64-decode the payload, edit the JSON, and
+    Base64-encode it again. But when the Edge Function recomputes the signature using the
+    modified payload, it gets a completely different value. It won't match the original
+    signature. The token is rejected.
+  </p>
+
+  <p>
+    The attacker cannot forge a valid signature without knowing the <code>SUPABASE_JWT_SECRET</code>,
+    which lives only in Supabase's server environment — never in the browser, never in your
+    source code.
+  </p>
+
+  <h3>The token lifecycle</h3>
+
+  <div class="diagram-wrapper">
+    <div class="diagram">
+  Sign in                       JWT issued
+     │                             │
+     ▼                             ▼
+ ┌──────────────────────────────────────────────────────────┐
+ │  access_token  (expires in 1 hour)                       │
+ │  refresh_token (expires in weeks/months)                 │
+ │  Both stored in localStorage by Supabase SDK             │
+ └──────────────────────────────────────────────────────────┘
+           │                            │
+           │ app uses access_token      │ SDK detects
+           │ for API calls              │ token nearing expiry
+           │                            │
+           ▼                            ▼
+    Each Edge Function          POST /auth/v1/token
+    validates it locally        ?grant_type=refresh_token
+                                Supabase issues new access_token
+                                silently, user never sees this
+    </div>
+    <p class="diagram-caption">Figure 9 — JWT lifecycle and silent refresh</p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     CHAPTER 4 — DENO, EDGE FUNCTIONS, PROXY CALLS
+═══════════════════════════════════════════════════════════ -->
+<div class="section page-break" id="explainer-edge">
+  <div class="explainer-chapter">
+    <p class="chapter-num">Chapter 4</p>
+    <h2>Deno, Edge Functions, and Why Your API Keys Can Never Reach the Browser</h2>
+  </div>
+
+  <p>
+    This chapter answers a fundamental question: if Dream Catcher has no backend server,
+    how do secret API keys stay secret? The answer is Edge Functions — and to understand
+    them, we need to first understand what the browser can and cannot do.
+  </p>
+
+  <h3>The browser's limitation with secrets</h3>
+
+  <p>
+    When you open a website, your browser downloads all the code needed to run it: HTML,
+    CSS, JavaScript. That code executes on your machine, in your browser tab. This is why
+    websites can respond instantly to your clicks without a round trip to a server — the
+    logic is already on your device.
+  </p>
+
+  <p>
+    The consequence: <em>anyone can read all the code your browser downloads</em>. Open
+    Chrome DevTools, go to the Sources tab, and you'll see every JavaScript file the site
+    loaded. There is no way to hide code from someone who wants to read it.
+  </p>
+
+  <p>
+    This means a secret API key placed anywhere in your JavaScript is exposed. Not just
+    "theoretically accessible" — literally readable by anyone who opens DevTools. If your
+    OpenAI key is in your client-side JavaScript, anyone can open your site, copy the key,
+    and use it to make API calls billed to your account.
+  </p>
+
+  <div class="callout-q">
+    <strong>What about obfuscating the key — splitting it, encoding it?</strong>
+    Security researchers call this "security through obscurity," and it doesn't work. Any
+    code that can be executed by a browser can be read, deobfuscated, and reverse-engineered.
+    The key will eventually be found. The only real solution is to move the key off the
+    browser entirely.
+  </div>
+
+  <h3>What is a server and why does it solve this?</h3>
+
+  <p>
+    A <span class="term">server</span> is a computer running code that responds to requests
+    from other computers. When you call an Edge Function from your browser, your request
+    travels to a Supabase-managed computer somewhere in a data center. That computer runs
+    your function code, which has access to environment variables — key-value pairs stored
+    in the server's memory that are never transmitted to the browser.
+  </p>
+
+  <p>
+    The browser sends a request: "here is my JWT, here is my image prompt." The server runs
+    the function, makes the OpenAI call internally using the API key (which only the server
+    knows), and returns the result. The browser receives the result. At no point did the API
+    key travel to the browser or appear in any response.
+  </p>
+
+  <div class="diagram-wrapper">
+    <div class="diagram">
+ BROWSER (visible to user, DevTools, etc.)
+ ┌──────────────────────────────────────────────┐
+ │  Your prompt                                 │
+ │  Your JWT                                    │
+ │  Nothing else                                │
+ └──────────────────────┬───────────────────────┘
+                        │ HTTPS request
+                        ▼
+ EDGE FUNCTION (invisible to user)
+ ┌──────────────────────────────────────────────┐
+ │  Receives: prompt + JWT                      │
+ │                                              │
+ │  Has access to environment:                  │
+ │    OPENAI_API_KEY = "sk-..."   ← secret      │
+ │    CLAUDE_API_KEY = "sk-ant-"  ← secret      │
+ │    SUPABASE_SERVICE_ROLE_KEY   ← secret      │
+ │                                              │
+ │  Makes internal HTTPS call to OpenAI         │
+ │  Receives base64 image                       │
+ │  Uploads to storage                          │
+ └──────────────────────┬───────────────────────┘
+                        │ Returns only: { url: "..." }
+                        ▼
+ BROWSER receives a public URL. No keys. No secrets.
+    </div>
+    <p class="diagram-caption">Figure 10 — The API key never crosses the boundary into the browser</p>
+  </div>
+
+  <h3>What is Deno?</h3>
+
+  <p>
+    Supabase Edge Functions are written in TypeScript and run on <span class="term">Deno</span>
+    — a JavaScript/TypeScript runtime created by Ryan Dahl, the same person who created
+    Node.js. Node.js was built in 2009 and has some design decisions that, in hindsight,
+    caused security and complexity problems. Deno was built in 2018 to fix them.
+  </p>
+
+  <p>For Edge Functions, the most relevant differences are:</p>
+
+  <ul>
+    <li><strong>Fast startup.</strong> Edge Functions are not long-running processes. They start on demand when a request arrives, run for milliseconds, and stop. Deno starts faster than Node, which matters when a function might cold-start for the first request.</li>
+    <li><strong>TypeScript natively.</strong> No compilation step needed — write TypeScript, run it directly.</li>
+    <li><strong>Web standard APIs.</strong> Deno uses the same <code>fetch()</code>, <code>Request</code>, <code>Response</code> APIs that browsers use, so Edge Function code feels familiar.</li>
+  </ul>
+
+  <h3>What does "Edge" mean geographically?</h3>
+
+  <p>
+    <span class="term">Edge compute</span> refers to running code at servers physically
+    close to users — at the "edge" of the network — rather than in one central data center.
+    Supabase deploys Edge Function code to many regions worldwide. When you trigger
+    <code>generate-image</code> from India, it executes on a server in Singapore or Mumbai,
+    not in a US data center. This reduces the round-trip time — your request doesn't have
+    to physically travel to the other side of the world.
+  </p>
+
+  <h3>How the proxy call to OpenAI actually works at the network level</h3>
+
+  <p>
+    When your browser calls <code>/functions/v1/generate-image</code>, here is the exact
+    sequence of network calls:
+  </p>
+
+  <div class="step-block">
+    <div class="step">
+      <span class="step-num">1</span>
+      <span class="step-text"><strong>Browser → Supabase.</strong> An HTTPS POST from your browser to <code>[project-id].supabase.co</code>, carrying your JWT and the image prompt. This request is encrypted by TLS. Supabase's servers see the decrypted contents — your prompt — but the API keys are nowhere in this request.</span>
+    </div>
+    <div class="step">
+      <span class="step-num">2</span>
+      <span class="step-text"><strong>Deno function starts.</strong> The Supabase platform routes the request to a Deno process running your function code. The Deno environment has the secret environment variables pre-loaded. The function validates your JWT.</span>
+    </div>
+    <div class="step">
+      <span class="step-num">3</span>
+      <span class="step-text"><strong>Supabase → OpenAI.</strong> From inside the Deno process, a new HTTPS POST is made to <code>api.openai.com/v1/images/generations</code>. This request includes the <code>OPENAI_API_KEY</code> in its Authorization header. This is a server-to-server call — your browser is not involved. The request originates from Supabase's servers, not from your IP address.</span>
+    </div>
+    <div class="step">
+      <span class="step-num">4</span>
+      <span class="step-text"><strong>OpenAI → Supabase.</strong> OpenAI returns a JSON response containing the generated image as a base64 string (a text representation of the binary image file).</span>
+    </div>
+    <div class="step">
+      <span class="step-num">5</span>
+      <span class="step-text"><strong>Supabase → Supabase Storage.</strong> The function decodes the base64 string back into bytes, then uploads those bytes to Supabase Storage using the Service Role Key. The image lands at a predictable path: <code>dream-catcher-db/{user_id}/{entry_id}/scene-0.png</code>.</span>
+    </div>
+    <div class="step">
+      <span class="step-num">6</span>
+      <span class="step-text"><strong>Supabase → Browser.</strong> The function returns a small JSON response: <code>{ "url": "https://...supabase.co/storage/...scene-0.png" }</code>. The browser receives only this URL — no API keys, no base64 blob, no internal details.</span>
+    </div>
+  </div>
+
+  <h3>Environment variables — what they are and how they're set</h3>
+
+  <p>
+    An <span class="term">environment variable</span> is a key-value pair injected into a
+    process's memory at startup. Programs read them with <code>Deno.env.get("KEY_NAME")</code>.
+    They are not part of the code — they're configuration. This separation means the same
+    function code can run in development (with test API keys) and production (with real API
+    keys) without any code changes.
+  </p>
+
+  <p>
+    In Supabase, secrets are set via the CLI: <code>supabase secrets set OPENAI_API_KEY=sk-...</code>.
+    Supabase encrypts and stores them. When a function starts, Supabase decrypts them and
+    injects them into the Deno process's environment. They're never stored in your code
+    repository, never in your HTML, never transmitted to any browser.
+  </p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     CHAPTER 5 — DATABASE LAYER
+═══════════════════════════════════════════════════════════ -->
+<div class="section page-break" id="explainer-db">
+  <div class="explainer-chapter">
+    <p class="chapter-num">Chapter 5</p>
+    <h2>The Database Layer — How a Browser Query Travels to Postgres and Back</h2>
+  </div>
+
+  <p>
+    When <code>db.js</code> calls <code>supabase.from('dreams').select('*')</code>,
+    what happens next is a chain of systems working together: the Supabase JS SDK, a REST
+    API layer called PostgREST, PostgreSQL itself, and Row-Level Security policies. Each
+    layer has a specific job. Let's trace the full path.
+  </p>
+
+  <h3>What is PostgreSQL?</h3>
+
+  <p>
+    <span class="term">PostgreSQL</span> (often called Postgres) is a relational database
+    — a system for storing data in structured tables with rows and columns, and querying it
+    with SQL. It's been in development since 1986 and is considered one of the most
+    reliable and feature-rich databases available. Supabase is essentially managed Postgres
+    with a set of services built on top of it.
+  </p>
+
+  <p>
+    Dream Catcher's data lives in two tables: <code>dreams</code> and <code>profiles</code>.
+    These tables live inside a Postgres instance managed by Supabase. You never interact
+    with Postgres directly from the browser — there's a translation layer in between.
+  </p>
+
+  <h3>What is PostgREST?</h3>
+
+  <p>
+    Databases speak SQL. HTTP clients speak HTTP. <span class="term">PostgREST</span> is an
+    open-source server that sits in front of PostgreSQL and translates HTTP requests into
+    SQL queries. It runs inside Supabase's infrastructure — you never deploy or configure it
+    yourself.
+  </p>
+
+  <p>When the Supabase JS SDK sends:</p>
+  <pre>GET https://[project-id].supabase.co/rest/v1/dreams
+Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
+apikey: eyJhbGciOiJIUzI1NiIs...</pre>
+
+  <p>PostgREST translates this to a SQL query and runs it against Postgres:</p>
+  <pre>SELECT * FROM dreams;</pre>
+
+  <p>
+    But before running that query, PostgREST does something critical: it reads the JWT from
+    the <code>Authorization</code> header, verifies it, and configures the Postgres session
+    so that <code>auth.uid()</code> will return the user's UUID for the duration of this
+    query. This is the bridge between the HTTP world and the database world.
+  </p>
+
+  <h3>Row-Level Security (RLS) — the database's own access control</h3>
+
+  <p>
+    <span class="term">Row-Level Security</span> is a feature built into PostgreSQL. It lets
+    you attach security policies to tables that automatically filter which rows any given
+    query can see or modify. It runs inside the database engine — it cannot be bypassed by
+    clever client-side code.
+  </p>
+
+  <p>Here is the RLS policy on the <code>dreams</code> table:</p>
+
+  <pre>CREATE POLICY "users can read own dreams"
+  ON dreams
+  FOR SELECT
+  USING (auth.uid() = user_id);</pre>
+
+  <p>
+    <code>USING</code> defines a filter that is applied to every row the query touches.
+    <code>auth.uid()</code> is a Supabase function that reads the UUID from the JWT that
+    PostgREST injected into the session. <code>user_id</code> is a column in the
+    <code>dreams</code> table.
+  </p>
+
+  <p>
+    What this means in practice: when Postgres runs <code>SELECT * FROM dreams</code>, it
+    automatically rewrites the query to filter by the logged-in user's UUID. The actual
+    query that executes is:
+  </p>
+
+  <pre>SELECT * FROM dreams
+WHERE user_id = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+-- ↑ injected by RLS, not by your application code</pre>
+
+  <p>
+    Even if a client sent a request trying to query all rows — removing filters, changing
+    parameters — RLS still applies. It's enforced by the database, not by application
+    logic. There is no way to opt out of it from a client using the anon key.
+  </p>
+
+  <h3>Why the anon key being public is not a vulnerability</h3>
+
+  <p>
+    The <span class="term">anon key</span> is the API key in <code>config.js</code>. It's
+    visible to anyone who views your source code. This seems alarming — shouldn't API keys
+    be secret?
+  </p>
+
+  <p>
+    The anon key has a specific, limited purpose: it tells PostgREST "this request is from
+    an anonymous or authenticated browser client — apply RLS." It is not a master password.
+    It has no ability to bypass RLS, access other users' data, or perform administrative
+    operations. Its only power is to talk to PostgREST with the constraints RLS imposes.
+  </p>
+
+  <p>Compare to the service role key:</p>
+
+  <table>
+    <tr><th>Key</th><th>Who has it</th><th>RLS enforced?</th><th>Storage write?</th></tr>
+    <tr>
+      <td>Anon key</td>
+      <td>Browser (public)</td>
+      <td>Yes — always</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Service role key</td>
+      <td>Edge Functions only</td>
+      <td>No — bypasses RLS</td>
+      <td>Yes</td>
+    </tr>
+  </table>
+
+  <p>
+    If someone steals the anon key, they can query the API — but they'll only see data
+    their own account has access to, because RLS always filters by their JWT. Without a
+    valid JWT tied to a real user account, they see nothing.
+  </p>
+
+  <h3>How an upsert travels through the system</h3>
+
+  <p>When <code>DB.saveDream(entry)</code> is called, the SDK constructs:</p>
+
+  <pre>POST https://[project-id].supabase.co/rest/v1/dreams
+Authorization: Bearer {JWT}
+apikey: {anon key}
+Content-Type: application/json
+Prefer: resolution=merge-duplicates    ← instructs PostgREST to upsert
+
+{
+  "id": "entry-12345",
+  "user_id": "a1b2c3d4-...",
+  "date": "2026-06-12",
+  "transcript": "I was standing in a forest...",
+  "scenes": ["A woman in a misty clearing...", "..."],
+  "style_key": "cinematic-noir",
+  "created_at": "2026-06-12T07:30:00Z"
+}</pre>
+
+  <p>
+    PostgREST translates this to:
+  </p>
+
+  <pre>INSERT INTO dreams (id, user_id, date, transcript, scenes, style_key, created_at)
+VALUES ('entry-12345', 'a1b2c3d4-...', '2026-06-12', ...)
+ON CONFLICT (id) DO UPDATE SET ...;</pre>
+
+  <p>
+    Before the INSERT executes, the RLS INSERT policy checks:
+    <code>auth.uid() = user_id</code>. Since the client is submitting its own UUID (from
+    the JWT) as the <code>user_id</code>, this passes. If someone tried to submit a
+    different user's UUID as <code>user_id</code>, the RLS check would fail and the INSERT
+    would be rejected.
+  </p>
+
+  <h3>The shared feed — reading other users' dreams</h3>
+
+  <p>
+    The home screen shows dreams from all users grouped by person. This means the SELECT
+    policy on <code>dreams</code> must allow reading rows where <code>user_id</code> is not
+    the current user. This is the one deliberate relaxation of isolation in the system —
+    made intentionally to enable the social feed feature. All dreams in the system are
+    visible to any authenticated user. The profiles table is similarly public-readable
+    because the feed needs to show display names.
+  </p>
+
+  <p>
+    If private dreams are ever needed, an <code>is_public</code> boolean column and an
+    updated RLS policy (<code>USING (is_public = true OR auth.uid() = user_id)</code>)
+    would be the right approach.
+  </p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     CHAPTER 6 — NETLIFY & CDN
+═══════════════════════════════════════════════════════════ -->
+<div class="section page-break" id="explainer-netlify">
+  <div class="explainer-chapter">
+    <p class="chapter-num">Chapter 6</p>
+    <h2>Netlify and the CDN — How Your App Gets to a Browser Anywhere in the World</h2>
+  </div>
+
+  <p>
+    Dream Catcher has no backend server. Netlify serves the files. Understanding exactly
+    what that means — what a CDN is, what "static" means at the infrastructure level, and
+    how files travel from Netlify to a user's browser — explains why the app loads fast
+    globally and how Netlify fits into the security model.
+  </p>
+
+  <h3>Static vs dynamic — the core distinction</h3>
+
+  <p>
+    A <span class="term">dynamic</span> web application has a server that runs code for
+    every request. When you load Facebook, a server queries a database for your specific
+    timeline, runs business logic to rank posts, and generates HTML tailored to you. The
+    HTML doesn't exist on disk — it's assembled fresh for each request.
+  </p>
+
+  <p>
+    A <span class="term">static</span> web application is different. The files on the server
+    are exactly the files the browser receives. When you request <code>index.html</code>,
+    the server reads that file from disk and returns it. No code runs. No database is
+    queried. Every user who requests <code>index.html</code> gets the exact same file.
+  </p>
+
+  <p>
+    Dream Catcher is static. The personalization — your dreams, your profile, your images —
+    all happens in the browser after the files load, through direct calls to Supabase.
+    Netlify's job is purely file delivery.
+  </p>
+
+  <div class="analogy">
+    A dynamic server is a chef who cooks a custom meal for each customer. A static server
+    is a vending machine — the contents are fixed, you just pick what you want.
+  </div>
+
+  <h3>What is a CDN?</h3>
+
+  <p>
+    <span class="term">CDN</span> stands for Content Delivery Network. It's a geographically
+    distributed network of servers — called <span class="term">edge nodes</span> or
+    <span class="term">Points of Presence (PoPs)</span> — each holding a copy of your site's
+    files.
+  </p>
+
+  <p>
+    Netlify operates CDN nodes in dozens of cities worldwide. When someone in Mumbai visits
+    your site, their browser's DNS lookup returns the IP address of a Netlify node in or
+    near Mumbai, not one in Virginia. The files travel a few hundred kilometers instead of
+    halfway around the world. This is why the initial page load feels fast regardless of
+    where the user is.
+  </p>
+
+  <div class="diagram-wrapper">
+    <div class="diagram">
+                        ┌──────────────────┐
+                        │  Netlify Origin  │
+                        │  (your files     │
+                        │   live here)     │
+                        └────────┬─────────┘
+                                 │ copies files to edge nodes
+                 ┌───────────────┼────────────────┐
+                 ▼               ▼                ▼
+        ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
+        │  Edge node   │ │  Edge node   │ │  Edge node   │
+        │  Frankfurt   │ │  Singapore   │ │  São Paulo   │
+        └──────┬───────┘ └──────┬───────┘ └──────┬───────┘
+               │                │                │
+               ▼                ▼                ▼
+          User in          User in          User in
+          London           India            Brazil
+    </div>
+    <p class="diagram-caption">Figure 11 — CDN distributes files to edge nodes near users</p>
+  </div>
+
+  <h3>What happens from the moment you type the URL</h3>
+
+  <div class="step-block">
+    <div class="step">
+      <span class="step-num">1</span>
+      <span class="step-text"><strong>DNS resolution.</strong> Your browser asks a DNS server: "What is the IP address for <code>dream-catcher.netlify.app</code>?" DNS (Domain Name System) is the internet's phone book — it maps domain names to IP addresses. Netlify's DNS returns the IP of the nearest CDN node to your location.</span>
+    </div>
+    <div class="step">
+      <span class="step-num">2</span>
+      <span class="step-text"><strong>TCP connection + TLS handshake.</strong> Your browser opens a TCP connection to that IP address (TCP is the underlying transport protocol for reliable data delivery). Then the TLS handshake happens — as described in Chapter 1. An encrypted channel is established. All of this takes roughly 50–150 milliseconds depending on your distance from the CDN node.</span>
+    </div>
+    <div class="step">
+      <span class="step-num">3</span>
+      <span class="step-text"><strong>HTTP request for index.html.</strong> Your browser sends: <code>GET / HTTP/1.1 Host: dream-catcher.netlify.app</code>. The CDN node checks if it has a cached copy of <code>index.html</code>. If yes, it returns it immediately from memory. If no (a "cache miss"), it fetches from the origin, caches it, and returns it.</span>
+    </div>
+    <div class="step">
+      <span class="step-num">4</span>
+      <span class="step-text"><strong>HTML parsed, additional files requested.</strong> Your browser parses the HTML and finds references to other files: <code>&lt;link rel="stylesheet" href="style.css"&gt;</code>, <code>&lt;script src="app.js"&gt;</code>, etc. It requests each of these in parallel — separate HTTP requests, all over the same encrypted connection.</span>
+    </div>
+    <div class="step">
+      <span class="step-num">5</span>
+      <span class="step-text"><strong>JavaScript begins executing.</strong> Once the scripts are downloaded, they execute in order. Supabase is initialized, the session is checked, and the app renders.</span>
+    </div>
+  </div>
+
+  <p>
+    Netlify never sees your dreams data. Every request Netlify handles is for a file:
+    <code>index.html</code>, <code>app.js</code>, <code>style.css</code>. The dream data,
+    the images, the profile — all of that flows through Supabase, not Netlify.
+  </p>
+
+  <h3>Caching — why the second load is faster than the first</h3>
+
+  <p>
+    <span class="term">Caching</span> means storing a copy of something so you can serve it
+    faster next time. CDN caching happens at two levels:
+  </p>
+
+  <ul>
+    <li><strong>CDN cache</strong> — the edge node stores your files in memory. When hundreds of users in the same region visit your site, the CDN serves the same cached files to all of them without fetching from origin each time.</li>
+    <li><strong>Browser cache</strong> — your browser stores downloaded files locally. When you revisit the site, the browser checks if it still has a valid cached copy before requesting the file again. Netlify sets <code>Cache-Control</code> headers to tell browsers how long they can cache each file.</li>
+  </ul>
+
+  <h3>What the security headers actually do</h3>
+
+  <p>
+    Netlify's <code>netlify.toml</code> attaches security headers to every response. These
+    aren't just formalities — each one closes a specific attack vector:
+  </p>
+
+  <p>
+    <strong>X-Frame-Options: DENY</strong> prevents any website from embedding the Dream
+    Catcher UI inside an <span class="term">iframe</span>. An iframe is an HTML element that
+    loads another webpage inside the current page. A <span class="term">clickjacking attack</span>
+    works by embedding the target site in a transparent iframe over a decoy page. The user
+    thinks they're clicking something on the decoy page but are actually clicking buttons on
+    the hidden target site — potentially logging out, deleting their account, or confirming
+    an action. <code>DENY</code> tells browsers: never render this site inside a frame,
+    regardless of who's asking.
+  </p>
+
+  <p>
+    <strong>X-Content-Type-Options: nosniff</strong> prevents a browser behavior called
+    <span class="term">MIME sniffing</span>. MIME types are labels that tell browsers what
+    kind of file a response is: <code>text/html</code>, <code>text/css</code>,
+    <code>application/javascript</code>. Without this header, some browsers will look at a
+    file's contents and try to guess its type even if the server said otherwise. An attacker
+    who could upload a file to your server might label it as an image but fill it with
+    JavaScript — and a browser that sniffs the MIME type might execute it. <code>nosniff</code>
+    says: trust the server's label, never guess.
+  </p>
+
+  <p>
+    <strong>Referrer-Policy: strict-origin-when-cross-origin</strong> controls what is sent
+    in the <span class="term">Referer</span> header (yes, spelled with one r — a historical
+    typo that became a standard). When you click a link, your browser includes the page you
+    came from in the Referer header of the request to the new page. This is useful for
+    analytics but can leak information. If a URL fragment ever contained a token and the
+    user clicked an external link, the full URL (including the fragment) could be sent to
+    a third party. This policy restricts the Referer to just the origin (the domain) when
+    navigating cross-origin, never the full path or fragment.
+  </p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     CHAPTER 7 — HOW IT ALL FITS TOGETHER
+═══════════════════════════════════════════════════════════ -->
+<div class="section page-break" id="explainer-together">
+  <div class="explainer-chapter">
+    <p class="chapter-num">Chapter 7</p>
+    <h2>How It All Fits Together — A Single Dream Session, Every System Explained</h2>
+  </div>
+
+  <p>
+    Let's put all six chapters together by walking through one morning — you open the app,
+    record a dream, and a notebook page appears with cinematic scenes. At each moment, we'll
+    name exactly which system is acting, what it's doing, and why it's safe.
+  </p>
+
+  <h3>7:00 AM — you open the app</h3>
+
+  <p>
+    Your browser resolves <code>dream-catcher.netlify.app</code> via DNS to the nearest
+    Netlify CDN node. A TLS handshake establishes an encrypted connection. Netlify delivers
+    <code>index.html</code>, <code>style.css</code>, and the six JavaScript files. These are
+    static files — Netlify ran no code, queried no database. The files are the same for
+    every user.
+  </p>
+
+  <p>
+    Your JavaScript initializes. <code>auth.js</code> creates a Supabase client using the
+    public anon key and calls <code>supabase.auth.getSession()</code>. The Supabase SDK
+    checks <code>localStorage</code> for a stored JWT. It finds one from your previous
+    login — checks if it's expired — sees it's still valid (or silently refreshes it).
+    The <code>onAuthStateChange</code> event fires with <code>SIGNED_IN</code>. The app
+    shows your home screen.
+  </p>
+
+  <p>
+    <code>db.js</code> calls <code>supabase.from('dreams').select('*')</code>. The Supabase
+    SDK sends an HTTPS GET to PostgREST with your JWT in the Authorization header. PostgREST
+    validates the JWT, injects your UUID into the Postgres session, and runs a SELECT
+    filtered by your <code>user_id</code> via RLS. Your dreams come back — only yours,
+    because RLS filtered everything else. The home carousel renders.
+  </p>
+
+  <h3>7:05 AM — you tap Record</h3>
+
+  <p>
+    <code>app.js</code> calls the browser's <code>navigator.mediaDevices.getUserMedia()</code>
+    API. The browser asks you for microphone permission. You grant it. A
+    <code>MediaRecorder</code> object starts capturing audio as a stream of binary chunks,
+    accumulating in memory.
+  </p>
+
+  <h3>7:08 AM — you tap Stop</h3>
+
+  <p>
+    The audio chunks are assembled into a <code>Blob</code> (a browser object representing
+    raw binary data) in a format like <code>webm</code> or <code>m4a</code> depending on
+    your browser. <code>api.js</code> wraps this in a <code>FormData</code> object and sends
+    it to the <code>transcribe-audio</code> Edge Function over HTTPS. The request includes
+    your JWT. The audio data and JWT travel encrypted — a man-in-the-middle sees nothing.
+  </p>
+
+  <p>
+    The Deno function receives the request, validates your JWT using the Supabase JWT secret,
+    extracts the audio file, and forwards it to OpenAI Whisper — a server-to-server call
+    using <code>OPENAI_API_KEY</code> from the environment. Whisper processes the audio and
+    returns text. The function returns <code>{ "text": "..." }</code> to your browser.
+    Your API key was never in the browser. Your audio was encrypted in transit. The text
+    appears in the bottom sheet.
+  </p>
+
+  <h3>7:09 AM — you tap Visualize</h3>
+
+  <p>
+    <code>app.js</code> calls <code>extractScenes(transcript)</code>. An HTTPS POST goes to
+    the <code>extract-scenes</code> Edge Function carrying the transcript and your JWT. The
+    Deno function validates the JWT, constructs a Claude prompt, and calls the Anthropic API
+    using <code>CLAUDE_API_KEY</code>. Claude processes the transcript, identifies three
+    visually distinct scenes, and returns them as JSON. The function returns
+    <code>{ scenes: [...], cleanedTranscript: "..." }</code>.
+  </p>
+
+  <p>
+    Your browser has stored the <code>preferredDreamStyle</code> in <code>localStorage</code>
+    from a previous session — "cinematic-noir." No style picker is shown.
+  </p>
+
+  <h3>7:09 AM — image generation begins</h3>
+
+  <p>
+    <code>app.js</code> calls <code>generateSceneRange()</code>. For each of the three scenes
+    in sequence:
+  </p>
+
+  <p>
+    <strong>Scene 0.</strong> An HTTPS POST goes to <code>generate-image</code> with the
+    scene description, style key, entry ID, your appearance prompt, and no reference image.
+    The Deno function builds the full prompt — scene text + appearance description + the
+    cinematic-noir style suffix. It calls <code>api.openai.com/v1/images/generations</code>
+    using <code>OPENAI_API_KEY</code>. OpenAI's <code>gpt-image-1</code> model generates
+    a 1024×1024 PNG and returns it as base64. The function decodes it to bytes and calls
+    Supabase Storage using the <code>SUPABASE_SERVICE_ROLE_KEY</code> — which bypasses RLS,
+    allowing the function to write to the bucket. The image is saved at
+    <code>dream-catcher-db/{your_id}/{entry_id}/scene-0.png</code>. A public URL is returned.
+  </p>
+
+  <p>
+    <strong>Scenes 1 and 2.</strong> Same process, but the <code>referenceImageUrl</code> is
+    set to the scene-0 URL. The Edge Function calls
+    <code>api.openai.com/v1/images/edits</code> instead — passing the first image as a visual
+    reference with <code>input_fidelity: high</code>. This tells gpt-image-1 to maintain
+    character consistency across scenes. Each image is uploaded and a URL returned.
+  </p>
+
+  <p>
+    Your browser received three public Storage URLs. No OpenAI API key ever touched the
+    browser. The images load directly from Supabase Storage — the browser fetches them as
+    plain public files, no auth required.
+  </p>
+
+  <h3>7:10 AM — the dream is saved</h3>
+
+  <p>
+    <code>DB.saveDream(entry)</code> sends an HTTPS POST to PostgREST with your JWT. PostgREST
+    validates the JWT, checks the RLS INSERT policy (<code>auth.uid() = user_id</code>
+    passes because you submitted your own UUID), and runs an UPSERT into the <code>dreams</code>
+    table. The dream is now in the database. Your notebook page renders.
+  </p>
+
+  <hr />
+
+  <p>
+    Every step in that session — file delivery, auth, transcription, scene extraction, image
+    generation, storage, database write — used HTTPS. API keys never left the server
+    environment. The database enforced access control without relying on your application
+    code getting it right. Google's identity verification happened without Dream Catcher ever
+    seeing your Google password. The CDN delivered your files from nearby, fast.
+  </p>
+
+  <p>
+    This is not magic — it's a set of well-understood protocols, each designed to solve one
+    specific trust problem, layered together. Once you see how each layer works individually,
+    the whole system becomes readable.
+  </p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     GLOSSARY
+═══════════════════════════════════════════════════════════ -->
+<div class="section page-break" id="glossary">
+  <div class="explainer-chapter">
+    <p class="chapter-num">Appendix</p>
+    <h2>Glossary — Every Term Defined</h2>
+  </div>
+
+  <table>
+    <tr><th>Term</th><th>Definition</th></tr>
+    <tr><td><strong>Anon Key</strong></td><td>Supabase's public API key for browser clients. Safe to expose because RLS policies restrict what it can access.</td></tr>
+    <tr><td><strong>Authorization Code</strong></td><td>A short-lived single-use code Google issues during OAuth. Useless without the client secret to exchange it.</td></tr>
+    <tr><td><strong>Base64</strong></td><td>A way of encoding binary data (like an image) as plain ASCII text so it can travel inside HTTP headers or JSON.</td></tr>
+    <tr><td><strong>CA (Certificate Authority)</strong></td><td>A trusted organization that signs SSL certificates. Your browser has a built-in list of trusted CAs.</td></tr>
+    <tr><td><strong>CDN (Content Delivery Network)</strong></td><td>A global network of servers that cache and deliver static files from locations near users.</td></tr>
+    <tr><td><strong>Client Secret</strong></td><td>A secret credential that proves to Google that a token exchange request is genuinely from your app's backend.</td></tr>
+    <tr><td><strong>Clickjacking</strong></td><td>An attack where a site is embedded invisibly in an iframe and the user is tricked into clicking its buttons.</td></tr>
+    <tr><td><strong>CORS</strong></td><td>Cross-Origin Resource Sharing — a browser policy that controls which origins can call which APIs. Edge Functions set CORS headers to allow browser requests.</td></tr>
+    <tr><td><strong>Deno</strong></td><td>A TypeScript/JavaScript runtime used by Supabase Edge Functions. Faster startup than Node.js, uses web standard APIs.</td></tr>
+    <tr><td><strong>DNS (Domain Name System)</strong></td><td>The internet's phone book — translates domain names like <code>supabase.co</code> to IP addresses.</td></tr>
+    <tr><td><strong>Edge Compute</strong></td><td>Running code at servers geographically close to users, reducing latency.</td></tr>
+    <tr><td><strong>Environment Variable</strong></td><td>A key-value pair injected into a process's memory at startup. Used to store secrets outside of code.</td></tr>
+    <tr><td><strong>Fragment (#)</strong></td><td>The part of a URL after <code>#</code>. Never sent to servers by the browser — only readable by client-side JavaScript.</td></tr>
+    <tr><td><strong>HMAC-SHA256</strong></td><td>A cryptographic function that produces a unique fixed-length fingerprint given data and a secret key.</td></tr>
+    <tr><td><strong>HTTPS</strong></td><td>HTTP over TLS — an encrypted connection between browser and server that prevents eavesdropping and tampering.</td></tr>
+    <tr><td><strong>iframe</strong></td><td>An HTML element that embeds another webpage inside the current page.</td></tr>
+    <tr><td><strong>JWT (JSON Web Token)</strong></td><td>A signed token containing user identity claims. Verifiable without a database lookup using the issuer's secret key.</td></tr>
+    <tr><td><strong>localStorage</strong></td><td>A browser storage mechanism for persisting data between sessions. Accessible only to scripts from the same origin.</td></tr>
+    <tr><td><strong>MIME Type</strong></td><td>A label describing what kind of data a file contains (e.g., <code>text/html</code>, <code>image/png</code>).</td></tr>
+    <tr><td><strong>OAuth 2.0</strong></td><td>An authorization protocol that lets one app verify a user's identity via another service without seeing their password.</td></tr>
+    <tr><td><strong>PostgREST</strong></td><td>An open-source server that translates HTTP requests into SQL queries, providing a REST API in front of PostgreSQL.</td></tr>
+    <tr><td><strong>PostgreSQL</strong></td><td>A powerful open-source relational database. Supabase is essentially managed PostgreSQL with additional services.</td></tr>
+    <tr><td><strong>RLS (Row-Level Security)</strong></td><td>A PostgreSQL feature that filters rows based on security policies evaluated inside the database engine.</td></tr>
+    <tr><td><strong>Service Role Key</strong></td><td>A Supabase key that bypasses RLS. Stored only in Edge Function environment — never in the browser.</td></tr>
+    <tr><td><strong>SSL Certificate</strong></td><td>A digital document signed by a CA that proves a server is who it claims to be. Used during TLS handshake.</td></tr>
+    <tr><td><strong>State Parameter</strong></td><td>A random string sent in an OAuth request and expected back in the callback. Prevents CSRF attacks.</td></tr>
+    <tr><td><strong>Static Site</strong></td><td>A website where the server delivers pre-existing files without running code or querying databases per request.</td></tr>
+    <tr><td><strong>TCP</strong></td><td>Transmission Control Protocol — the underlying transport layer for reliable, ordered data delivery across the internet.</td></tr>
+    <tr><td><strong>TLS (Transport Layer Security)</strong></td><td>The cryptographic protocol behind HTTPS. Establishes an encrypted channel between client and server.</td></tr>
+    <tr><td><strong>Token Exchange</strong></td><td>Sending an authorization code + client secret to Google in exchange for real access tokens.</td></tr>
+    <tr><td><strong>URL Fragment</strong></td><td>See Fragment (#).</td></tr>
+  </table>
+</div>
+
+
+<!-- ── Prev / Next nav ──────────────────────────────────── -->
+<div class="page-nav no-print">
+  <button class="page-nav-btn" id="prev-btn" onclick="prevTab()">&#8592; Previous</button>
+  <span class="page-indicator" id="page-indicator">1 / 14</span>
+  <button class="page-nav-btn" id="next-btn" onclick="nextTab()">Next &#8594;</button>
+</div>
+
+<script>
+  // Maps each tab index to the CSS selectors it should show.
+  // Every selector not in the active tab is hidden.
+  const TABS = [
+    // ── REFERENCE ──────────────────────────────────────────
+    { selectors: ['.cover', '.toc'] },                                                     // 0  Contents
+    { selectors: ['#arch-overview'] },                                                     // 1  Architecture
+    { selectors: ['#netlify', '#google-sso'] },                                            // 2  Netlify & Auth
+    { selectors: ['#supabase-layers'] },                                                   // 3  Supabase
+    { selectors: ['#edge-functions'] },                                                    // 4  Edge Functions
+    { selectors: ['#api-journey', '#db-security', '#secrets', '#summary'] },              // 5  API & Security
+    // ── DEEP EXPLAINER ─────────────────────────────────────
+    { selectors: ['.explainer-cover', '#explainer-https'] },                               // 6  HTTPS
+    { selectors: ['#explainer-oauth'] },                                                   // 7  Google Sign-In
+    { selectors: ['#explainer-jwt'] },                                                     // 8  JWTs
+    { selectors: ['#explainer-edge'] },                                                    // 9  Edge Fns & Deno
+    { selectors: ['#explainer-db'] },                                                      // 10 Database & RLS
+    { selectors: ['#explainer-netlify'] },                                                 // 11 Netlify & CDN
+    { selectors: ['#explainer-together'] },                                                // 12 Full Walkthrough
+    { selectors: ['#glossary'] },                                                          // 13 Glossary
+  ];
+
+  // Flat list of every selector that can be hidden
+  const ALL = TABS.flatMap(t => t.selectors);
+
+  // The inline <style> block injected for explainer styles sits between sections;
+  // we never target it so it's always visible — that's fine.
+
+  let current = 0;
+
+  function showTab(n) {
+    current = n;
+
+    // Hide everything
+    ALL.forEach(sel => {
+      const el = document.querySelector(sel);
+      if (el) el.style.display = 'none';
+    });
+
+    // Show this tab's sections
+    TABS[n].selectors.forEach(sel => {
+      const el = document.querySelector(sel);
+      if (el) el.style.display = '';
+    });
+
+    // Update tab button states
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.tab) === n);
+    });
+
+    // Update prev / next
+    document.getElementById('prev-btn').disabled = n === 0;
+    document.getElementById('next-btn').disabled = n === TABS.length - 1;
+    document.getElementById('page-indicator').textContent = (n + 1) + ' / ' + TABS.length;
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function prevTab() { if (current > 0) showTab(current - 1); }
+  function nextTab() { if (current < TABS.length - 1) showTab(current + 1); }
+
+  // Wire up tab buttons
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => showTab(parseInt(btn.dataset.tab)));
+  });
+
+  // Keyboard: left/right arrows to navigate
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') nextTab();
+    if (e.key === 'ArrowLeft')  prevTab();
+  });
+
+  // Boot: show first tab
+  showTab(0);
+</script>
+
+<footer class="site-footer">
+  <a href="mailto:harpreet.vishnoi@gmail.com">harpreet.vishnoi@gmail.com</a>
+</footer>
+
+</body>
+</html>
