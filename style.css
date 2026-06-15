@@ -476,3 +476,120 @@ footer a:hover {
     gap: 0.15rem;
   }
 }
+
+/* ---- Teardowns listing ---- */
+.page-desc {
+  font-size: 0.92rem;
+  color: var(--muted);
+  margin-top: -1.5rem;
+  margin-bottom: 2rem;
+}
+
+.teardown-list {
+  border-top: 1px solid var(--border);
+}
+
+.teardown-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  color: var(--text);
+  transition: opacity 0.15s;
+}
+
+.teardown-card:hover {
+  opacity: 0.55;
+}
+
+.teardown-thumb {
+  width: 80px;
+  height: 56px;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--tag-bg);
+}
+
+.teardown-thumb-empty {
+  background: var(--tag-bg);
+}
+
+.teardown-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.teardown-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.teardown-type {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.teardown-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.teardown-brand {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+/* ---- Single teardown ---- */
+.teardown-single {
+  max-width: 100%;
+}
+
+.teardown-type-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.teardown-video-wrap {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  margin: 2rem 0;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.teardown-video-wrap iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.teardown-image-wrap {
+  margin: 2rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.teardown-image-wrap img {
+  width: 100%;
+  display: block;
+}
+
+.teardown-commentary {
+  margin-top: 2rem;
+}

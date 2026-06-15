@@ -1,0 +1,11 @@
+title: Harpreet Vishnoi
+description: Senior PM with 7+ years building AI products.
+url: "https://harpreetvishnoi.com"
+baseurl: ""
+permalink: /posts/:title/
+collections:
+  teardowns:
+    output: true
+    permalink: /teardowns/:name/
+exclude:
+  - README.md

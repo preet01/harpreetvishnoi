@@ -1,0 +1,9 @@
+<nav>
+  <a href="/" class="nav-home">Harpreet Vishnoi</a>
+  <div class="nav-links">
+    <a href="/writing.html" {% if page.layout == 'post' or page.url == '/writing.html' %}class="active"{% endif %}>Writing</a>
+    <a href="/projects.html" {% if page.url == '/projects.html' %}class="active"{% endif %}>Projects</a>
+    <a href="/teardowns.html" {% if page.layout == 'teardown' or page.url == '/teardowns.html' %}class="active"{% endif %}>Teardowns</a>
+    <a href="/curiosities.html" {% if page.url == '/curiosities.html' %}class="active"{% endif %}>Curiosities</a>
+  </div>
+</nav>

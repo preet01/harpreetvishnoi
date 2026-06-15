@@ -1,0 +1,28 @@
+---
+layout: default
+---
+<article class="teardown-single">
+  <a href="/teardowns.html" class="post-back">&larr; Teardowns</a>
+
+  <header class="post-header">
+    <span class="teardown-type-tag">{{ page.type | default: "Product" }}{% if page.brand %} &middot; {{ page.brand }}{% endif %}</span>
+    <h1>{{ page.title }}</h1>
+    <p class="post-meta">{{ page.date | date: "%b %-d, %Y" }}</p>
+  </header>
+
+  {% if page.video %}
+  <div class="teardown-video-wrap">
+    <iframe src="{{ page.video }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+  {% endif %}
+
+  {% if page.image %}
+  <div class="teardown-image-wrap">
+    <img src="{{ page.image }}" alt="{{ page.title }}" />
+  </div>
+  {% endif %}
+
+  <div class="post-body teardown-commentary">
+    {{ content }}
+  </div>
+</article>

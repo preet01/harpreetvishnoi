@@ -1,0 +1,31 @@
+---
+layout: default
+title: Teardowns
+description: Harpreet Vishnoi dissects products, ads, and things worth analyzing.
+---
+<h1 class="page-title">Teardowns</h1>
+<p class="page-desc">Products, ads, and things worth dissecting — with video, images, and my take.</p>
+
+<div class="teardown-list">
+  {% assign sorted_teardowns = site.teardowns | sort: 'date' | reverse %}
+  {% for item in sorted_teardowns %}
+  <a href="{{ item.url }}" class="teardown-card">
+    {% if item.thumbnail %}
+    <div class="teardown-thumb">
+      <img src="{{ item.thumbnail }}" alt="{{ item.title }}" loading="lazy" />
+    </div>
+    {% else %}
+    <div class="teardown-thumb teardown-thumb-empty"></div>
+    {% endif %}
+    <div class="teardown-info">
+      <span class="teardown-type">{{ item.type | default: "Product" }}</span>
+      <span class="teardown-name">{{ item.title }}</span>
+      {% if item.brand %}<span class="teardown-brand">{{ item.brand }}</span>{% endif %}
+    </div>
+  </a>
+  {% endfor %}
+
+  {% if site.teardowns.size == 0 %}
+  <p class="empty-state">Coming soon.</p>
+  {% endif %}
+</div>
