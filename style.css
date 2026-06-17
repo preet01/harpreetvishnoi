@@ -377,23 +377,23 @@ footer a:hover {
 }
 
 .post-body h2 {
-  font-size: 1.1rem;
+  font-size: 1.35rem;
   font-weight: 600;
   letter-spacing: -0.02em;
-  margin: 2.25rem 0 0.75rem;
+  margin: 2.5rem 0 0.85rem;
   color: var(--text);
 }
 
 .post-body h3 {
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   font-weight: 600;
   letter-spacing: -0.01em;
-  margin: 1.75rem 0 0.5rem;
+  margin: 1.75rem 0 0.65rem;
   color: var(--text);
 }
 
 .post-body p {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
 .post-body p:last-child {
@@ -402,11 +402,13 @@ footer a:hover {
 
 .post-body ul,
 .post-body ol {
-  margin: 0 0 1.25rem 1.25rem;
+  padding-left: 1.75rem;
+  margin-left: 0;
+  margin-bottom: 1.5rem;
 }
 
 .post-body li {
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.65rem;
 }
 
 .post-body strong {
@@ -504,26 +506,6 @@ footer a:hover {
   opacity: 0.55;
 }
 
-.teardown-thumb {
-  width: 80px;
-  height: 56px;
-  border-radius: 6px;
-  overflow: hidden;
-  flex-shrink: 0;
-  background: var(--tag-bg);
-}
-
-.teardown-thumb-empty {
-  background: var(--tag-bg);
-}
-
-.teardown-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
 .teardown-info {
   display: flex;
   flex-direction: column;
@@ -552,15 +534,6 @@ footer a:hover {
   max-width: 100%;
 }
 
-.teardown-type-tag {
-  display: inline-block;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  margin-bottom: 0.5rem;
-}
-
 .teardown-video-wrap {
   position: relative;
   width: 100%;
@@ -577,17 +550,6 @@ footer a:hover {
   left: 0;
   width: 100%;
   height: 100%;
-}
-
-.teardown-image-wrap {
-  margin: 2rem 0;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.teardown-image-wrap img {
-  width: 100%;
-  display: block;
 }
 
 .teardown-commentary {

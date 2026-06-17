@@ -10,17 +10,9 @@ description: Harpreet Vishnoi dissects products, ads, and things worth analyzing
   {% assign sorted_teardowns = site.teardowns | sort: 'date' | reverse %}
   {% for item in sorted_teardowns %}
   <a href="{{ item.url }}" class="teardown-card">
-    {% if item.thumbnail %}
-    <div class="teardown-thumb">
-      <img src="{{ item.thumbnail }}" alt="{{ item.title }}" loading="lazy" />
-    </div>
-    {% else %}
-    <div class="teardown-thumb teardown-thumb-empty"></div>
-    {% endif %}
     <div class="teardown-info">
-      <span class="teardown-type">{{ item.type | default: "Product" }}</span>
+      <span class="teardown-type">{{ item.type | default: "Product" }}{% if item.brand %} &middot; {{ item.brand }}{% endif %}</span>
       <span class="teardown-name">{{ item.title }}</span>
-      {% if item.brand %}<span class="teardown-brand">{{ item.brand }}</span>{% endif %}
     </div>
   </a>
   {% endfor %}
