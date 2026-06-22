@@ -1,3 +1,9 @@
+---
+layout: post
+title: "Kodak & Counter Positioning"
+date: 2026-06-21
+read_time: 3
+---
 
 Counter positioning is when a small newcomer wins by adopting a new, better business model that the big established leader cannot copy, because copying it would blow up the leader's own profitable business.
 
