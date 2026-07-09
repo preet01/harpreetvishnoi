@@ -202,85 +202,6 @@
     .page-break { page-break-before: always; }
     .keep-together { page-break-inside: avoid; }
 
-    /* ── Tab navigation ─────────────────────────────────────── */
-    .tab-nav-wrapper {
-      position: sticky;
-      top: 0;
-      background: #fff;
-      z-index: 100;
-      border-bottom: 2px solid #1a1a1a;
-      margin: 0 -32px 40px;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    .tab-group {
-      display: flex;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      scrollbar-width: none;
-      padding: 0 32px;
-      gap: 0;
-    }
-    .tab-group::-webkit-scrollbar { display: none; }
-    .tab-group-label {
-      font-size: 7.5pt;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: #aaa;
-      padding: 6px 32px 0;
-      font-family: 'Georgia', serif;
-    }
-    .tab-group + .tab-group {
-      border-top: 1px solid #eee;
-    }
-    .tab-btn {
-      flex-shrink: 0;
-      padding: 9px 14px;
-      border: none;
-      background: none;
-      cursor: pointer;
-      font-family: 'Georgia', 'Times New Roman', serif;
-      font-size: 10pt;
-      color: #888;
-      border-bottom: 3px solid transparent;
-      margin-bottom: -2px;
-      white-space: nowrap;
-      transition: color 0.15s;
-    }
-    .tab-btn:hover { color: #1a1a1a; }
-    .tab-btn.active { color: #1a1a1a; font-weight: 700; border-bottom-color: #1a1a1a; }
-    .tab-btn.explainer-tab { font-style: italic; }
-
-    /* ── Prev / Next ────────────────────────────────────────── */
-    .page-nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 48px;
-      padding: 20px 0 8px;
-      border-top: 1px solid #ddd;
-    }
-    .page-nav-btn {
-      padding: 8px 22px;
-      border: 1.5px solid #1a1a1a;
-      background: none;
-      cursor: pointer;
-      font-family: 'Georgia', serif;
-      font-size: 10.5pt;
-      border-radius: 3px;
-      transition: background 0.15s, color 0.15s;
-    }
-    .page-nav-btn:hover:not(:disabled) { background: #1a1a1a; color: #fff; }
-    .page-nav-btn:disabled { opacity: 0.25; cursor: default; }
-    .page-indicator { font-size: 10pt; color: #999; font-family: 'Georgia', serif; }
-
-    /* ── Print: show everything, hide chrome ───────────────── */
-    @media print {
-      .tab-nav-wrapper, .page-nav { display: none !important; }
-      .tab-section { display: block !important; }
-    }
   </style>
 </head>
 <body>
@@ -292,30 +213,6 @@
     <a href="/projects/" class="active">Projects</a>
     <a href="/teardowns/">Teardowns</a>
     <a href="/curiosities/">Curiosities</a>
-  </div>
-</nav>
-
-<!-- ── Tab navigation bar ─────────────────────────────── -->
-<nav class="tab-nav-wrapper no-print">
-  <div class="tab-group" id="group-ref">
-    <span class="tab-group-label" style="display:flex;align-items:center;padding:5px 14px 0;font-size:7pt;color:#bbb;white-space:nowrap;">Reference</span>
-    <button class="tab-btn active" data-tab="0">Contents</button>
-    <button class="tab-btn" data-tab="1">Architecture</button>
-    <button class="tab-btn" data-tab="2">Netlify &amp; Auth</button>
-    <button class="tab-btn" data-tab="3">Supabase</button>
-    <button class="tab-btn" data-tab="4">Edge Functions</button>
-    <button class="tab-btn" data-tab="5">API &amp; Security</button>
-  </div>
-  <div class="tab-group">
-    <span class="tab-group-label" style="display:flex;align-items:center;padding:5px 14px 0;font-size:7pt;color:#bbb;white-space:nowrap;">Deep Explainer</span>
-    <button class="tab-btn explainer-tab" data-tab="6">HTTPS</button>
-    <button class="tab-btn explainer-tab" data-tab="7">Google Sign-In</button>
-    <button class="tab-btn explainer-tab" data-tab="8">JWTs</button>
-    <button class="tab-btn explainer-tab" data-tab="9">Edge Fns &amp; Deno</button>
-    <button class="tab-btn explainer-tab" data-tab="10">Database &amp; RLS</button>
-    <button class="tab-btn explainer-tab" data-tab="11">Netlify &amp; CDN</button>
-    <button class="tab-btn explainer-tab" data-tab="12">Full Walkthrough</button>
-    <button class="tab-btn explainer-tab" data-tab="13">Glossary</button>
   </div>
 </nav>
 
@@ -361,6 +258,17 @@
     <li><a href="#db-security">Database Security &amp; RLS</a></li>
     <li><a href="#secrets">Secrets &amp; Environment Variables</a></li>
     <li><a href="#summary">Integration Summary Table</a></li>
+  </ol>
+  <h2 style="margin-top:32px;">Part II — The Why Behind the How</h2>
+  <ol start="10">
+    <li><a href="#explainer-https">HTTPS from First Principles</a></li>
+    <li><a href="#explainer-oauth">Google Sign-In &amp; OAuth</a></li>
+    <li><a href="#explainer-jwt">JWTs</a></li>
+    <li><a href="#explainer-edge">Edge Functions &amp; Deno</a></li>
+    <li><a href="#explainer-db">Database &amp; RLS</a></li>
+    <li><a href="#explainer-netlify">Netlify &amp; CDNs</a></li>
+    <li><a href="#explainer-together">Full Walkthrough</a></li>
+    <li><a href="#glossary">Glossary</a></li>
   </ol>
 </div>
 
@@ -2340,89 +2248,6 @@ ON CONFLICT (id) DO UPDATE SET ...;</pre>
   </table>
 </div>
 
-
-<!-- ── Prev / Next nav ──────────────────────────────────── -->
-<div class="page-nav no-print">
-  <button class="page-nav-btn" id="prev-btn" onclick="prevTab()">&#8592; Previous</button>
-  <span class="page-indicator" id="page-indicator">1 / 14</span>
-  <button class="page-nav-btn" id="next-btn" onclick="nextTab()">Next &#8594;</button>
-</div>
-
-<script>
-  // Maps each tab index to the CSS selectors it should show.
-  // Every selector not in the active tab is hidden.
-  const TABS = [
-    // ── REFERENCE ──────────────────────────────────────────
-    { selectors: ['.cover', '.toc'] },                                                     // 0  Contents
-    { selectors: ['#arch-overview'] },                                                     // 1  Architecture
-    { selectors: ['#netlify', '#google-sso'] },                                            // 2  Netlify & Auth
-    { selectors: ['#supabase-layers'] },                                                   // 3  Supabase
-    { selectors: ['#edge-functions'] },                                                    // 4  Edge Functions
-    { selectors: ['#api-journey', '#db-security', '#secrets', '#summary'] },              // 5  API & Security
-    // ── DEEP EXPLAINER ─────────────────────────────────────
-    { selectors: ['.explainer-cover', '#explainer-https'] },                               // 6  HTTPS
-    { selectors: ['#explainer-oauth'] },                                                   // 7  Google Sign-In
-    { selectors: ['#explainer-jwt'] },                                                     // 8  JWTs
-    { selectors: ['#explainer-edge'] },                                                    // 9  Edge Fns & Deno
-    { selectors: ['#explainer-db'] },                                                      // 10 Database & RLS
-    { selectors: ['#explainer-netlify'] },                                                 // 11 Netlify & CDN
-    { selectors: ['#explainer-together'] },                                                // 12 Full Walkthrough
-    { selectors: ['#glossary'] },                                                          // 13 Glossary
-  ];
-
-  // Flat list of every selector that can be hidden
-  const ALL = TABS.flatMap(t => t.selectors);
-
-  // The inline <style> block injected for explainer styles sits between sections;
-  // we never target it so it's always visible — that's fine.
-
-  let current = 0;
-
-  function showTab(n) {
-    current = n;
-
-    // Hide everything
-    ALL.forEach(sel => {
-      const el = document.querySelector(sel);
-      if (el) el.style.display = 'none';
-    });
-
-    // Show this tab's sections
-    TABS[n].selectors.forEach(sel => {
-      const el = document.querySelector(sel);
-      if (el) el.style.display = '';
-    });
-
-    // Update tab button states
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.classList.toggle('active', parseInt(btn.dataset.tab) === n);
-    });
-
-    // Update prev / next
-    document.getElementById('prev-btn').disabled = n === 0;
-    document.getElementById('next-btn').disabled = n === TABS.length - 1;
-    document.getElementById('page-indicator').textContent = (n + 1) + ' / ' + TABS.length;
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function prevTab() { if (current > 0) showTab(current - 1); }
-  function nextTab() { if (current < TABS.length - 1) showTab(current + 1); }
-
-  // Wire up tab buttons
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => showTab(parseInt(btn.dataset.tab)));
-  });
-
-  // Keyboard: left/right arrows to navigate
-  document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight') nextTab();
-    if (e.key === 'ArrowLeft')  prevTab();
-  });
-
-  // Boot: show first tab
-  showTab(0);
-</script>
 
 <footer>
   <a href="mailto:harpreet.vishnoi@gmail.com">harpreet.vishnoi@gmail.com</a>
