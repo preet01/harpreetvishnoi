@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spiel Architecture — Harpreet Vishnoi</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    /* Override site.css flex body — this page manages its own layout */
+    body { display: block; }
+
+    @page { size: A4; margin: 22mm 20mm 22mm 20mm; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: 11pt;
+      line-height: 1.65;
+      color: #1a1a1a;
+      background: #fff;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 40px 32px;
+    }
+
+    /* ── Cover ─────────────────────────────────────────────── */
+    .cover {
+      text-align: center;
+      padding: 80px 0 60px;
+      border-bottom: 2px solid #1a1a1a;
+      margin-bottom: 56px;
+    }
+    .cover .mark { font-size: 48px; display: block; margin-bottom: 20px; }
+    .cover h1 { font-size: 28pt; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
+    .cover .subtitle { font-size: 13pt; color: #555; margin-bottom: 32px; font-style: italic; }
+    .cover .meta { font-size: 10pt; color: #888; }
+    .cover .meta span { display: inline-block; margin: 0 12px; }
+
+    /* ── TOC ────────────────────────────────────────────────── */
+    .toc { margin-bottom: 56px; }
+    .toc h2 { font-size: 16pt; margin-bottom: 20px; padding-bottom: 6px; border-bottom: 1px solid #ccc; }
+    .toc ol { padding-left: 20px; }
+    .toc li { padding: 4px 0; font-size: 11pt; }
+    .toc li a { color: #1a1a1a; text-decoration: none; }
+    .toc li a:hover { text-decoration: underline; }
+
+    /* ── Headings ───────────────────────────────────────────── */
+    h2 {
+      font-size: 15pt;
+      margin-top: 40px;
+      margin-bottom: 14px;
+      padding-bottom: 6px;
+      border-bottom: 1.5px solid #1a1a1a;
+      page-break-after: avoid;
+    }
+    h3 { font-size: 12pt; margin-top: 28px; margin-bottom: 10px; font-weight: 700; page-break-after: avoid; }
+
+    p { margin-bottom: 12px; }
+    ul, ol { margin: 10px 0 12px 22px; }
+    li { margin-bottom: 4px; }
+
+    /* ── Diagrams ───────────────────────────────────────────── */
+    .diagram-wrapper { margin: 24px 0; page-break-inside: avoid; }
+    .diagram {
+      font-family: 'Courier New', monospace;
+      font-size: 8.5pt;
+      line-height: 1.45;
+      background: #f7f7f7;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 20px 22px;
+      white-space: pre;
+      overflow-x: auto;
+    }
+    .diagram-caption { text-align: center; font-size: 9.5pt; color: #666; margin-top: 8px; font-style: italic; }
+
+    /* ── Code / tables / boxes ──────────────────────────────── */
+    code { font-family: 'Courier New', monospace; font-size: 9.5pt; background: #f0f0f0; padding: 1px 4px; border-radius: 2px; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 10pt; page-break-inside: avoid; }
+    th { background: #1a1a1a; color: #fff; font-weight: 600; text-align: left; padding: 7px 10px; font-size: 9.5pt; }
+    td { border: 1px solid #ccc; padding: 6px 10px; vertical-align: top; }
+    tr:nth-child(even) td { background: #fafafa; }
+
+    .box { padding: 12px 16px; border-radius: 3px; margin: 14px 0; page-break-inside: avoid; font-size: 10.5pt; }
+    .box-note { background: #eef4ff; border-left: 4px solid #4a7fe8; }
+    .box-warn { background: #fff8e1; border-left: 4px solid #e0a800; }
+    .box-secure { background: #eaf7ee; border-left: 4px solid #34a853; }
+
+    .flow { display: table; width: 100%; margin: 14px 0; }
+    .flow-step { display: table-row; }
+    .flow-step .num { display: table-cell; width: 28px; font-weight: 700; color: #555; padding-right: 10px; padding-bottom: 6px; vertical-align: top; font-size: 10pt; }
+    .flow-step .text { display: table-cell; padding-bottom: 6px; font-size: 10.5pt; }
+
+    .section { margin-top: 48px; }
+    hr { border: none; border-top: 1px solid #ddd; margin: 28px 0; }
+
+    @media print { body { padding: 0; } a { color: #1a1a1a; } nav { display: none; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-home">Harpreet Vishnoi</a>
+  <div class="nav-links">
+    <a href="/writing/">Writing</a>
+    <a href="/projects/" class="active">Projects</a>
+    <a href="/teardowns/">Teardowns</a>
+    <a href="/curiosities/">Curiosities</a>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════
+     COVER
+═══════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <span class="mark">🔊</span>
+  <h1>Spiel</h1>
+  <p class="subtitle">System Architecture &amp; Technical Reference — a Chrome extension that reads the web aloud, entirely on your own machine</p>
+  <p class="meta">
+    <span>Version 1.1</span>
+    <span>July 2026</span>
+    <span><a href="https://github.com/preet01/spiel" style="color:#888;">github.com/preet01/spiel</a></span>
+  </p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     CONTENTS
+═══════════════════════════════════════════════════════════ -->
+<div class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#arch-overview">Architecture Overview</a></li>
+    <li><a href="#contexts">The Four Execution Contexts</a></li>
+    <li><a href="#pipeline">The Playback Pipeline</a></li>
+    <li><a href="#karaoke">Word-Level Highlighting</a></li>
+    <li><a href="#pdf">Reading PDFs</a></li>
+    <li><a href="#robustness">Surviving Chrome</a></li>
+    <li><a href="#privacy">The Privacy Model</a></li>
+  </ol>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     1. ARCHITECTURE OVERVIEW
+═══════════════════════════════════════════════════════════ -->
+<div class="section" id="arch-overview">
+  <h2>1. Architecture Overview</h2>
+
+  <p>
+    Spiel is a Manifest V3 Chrome extension paired with a local neural text-to-speech
+    engine. The extension extracts readable text from any article or PDF, splits it into
+    sentences, and streams each sentence through Kokoro-82M — an 82-million-parameter TTS
+    model served by Kokoro-FastAPI on <code>127.0.0.1:8880</code>. Audio plays with
+    word-by-word highlighting that follows the voice across the page. There is no backend,
+    no account, and no network traffic beyond localhost: turn off Wi-Fi and it still works.
+  </p>
+
+  <div class="diagram-wrapper">
+    <div class="diagram">
+ ┌──────────────────────────────────────────────────────────────────────────────┐
+ │                              SPIEL SYSTEM                                    │
+ └──────────────────────────────────────────────────────────────────────────────┘
+
+   CHROME (four isolated execution contexts)
+  ┌────────────────────────────────────────────────────────────────────────┐
+  │                                                                        │
+  │   POPUP                        BACKGROUND SERVICE WORKER               │
+  │   (toolbar click)              (the brain — state machine)             │
+  │   ┌──────────────┐   PLAY     ┌──────────────────────────────┐        │
+  │   │ Listen button│ ─────────► │ sentence queue · prefetch     │        │
+  │   └──────────────┘            │ LRU audio cache · watchdogs   │        │
+  │                               └───┬──────────────┬───────────┘        │
+  │                        GET_ARTICLE│              │PLAY_AUDIO           │
+  │                                   ▼              ▼                     │
+  │   CONTENT SCRIPT (per tab)              OFFSCREEN DOCUMENT             │
+  │   ┌──────────────────────────┐          ┌───────────────────┐         │
+  │   │ Readability extraction   │          │ Web Audio playback │         │
+  │   │ word index + highlighting│          │ (autoplay-exempt)  │         │
+  │   │ floating player · pill   │          └─────────┬─────────┘         │
+  │   └──────────────────────────┘                    │AUDIO_ENDED         │
+  │                                                   ▼ (advance queue)    │
+  └───────────────────────────────┬────────────────────────────────────────┘
+                                  │ HTTP (localhost only)
+                                  ▼
+  ┌────────────────────────────────────────────────────────────────────────┐
+  │   KOKORO VOICE ENGINE — 127.0.0.1:8880                                 │
+  │   FastAPI + Kokoro-82M · /v1/audio/speech · word timestamps            │
+  │   installed once via install.sh · runs as a LaunchAgent               │
+  └────────────────────────────────────────────────────────────────────────┘
+
+                        nothing crosses the machine boundary
+    </div>
+    <p class="diagram-caption">Figure 1 — High-level system architecture</p>
+  </div>
+
+  <h3>Key Design Principles</h3>
+  <ul>
+    <li><strong>Everything local.</strong> The voice engine binds to <code>127.0.0.1</code> only. The single piece of network traffic in Spiel's lifetime is the one-time engine download at install.</li>
+    <li><strong>Pick the context by the API it has, not by convenience.</strong> MV3 splits an extension into contexts with wildly different capabilities (Section 2). Most of Spiel's historical bugs came from ignoring this; the architecture now encodes it.</li>
+    <li><strong>One source of truth per concern.</strong> The service worker owns playback state; the content script owns everything visible; the offscreen document owns audio. No two contexts duplicate a responsibility.</li>
+    <li><strong>Fail at build time, not on the user's click.</strong> The build runs a strict TypeScript check plus a dist-completeness gate that fails if any runtime-referenced file is missing — because "it bundled" and "it works" are different claims.</li>
+  </ul>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     2. THE FOUR EXECUTION CONTEXTS
+═══════════════════════════════════════════════════════════ -->
+<div class="section" id="contexts">
+  <h2>2. The Four Execution Contexts</h2>
+
+  <p>
+    A Manifest V3 extension is not one program. It is four programs with different powers,
+    different lifetimes, and a message bus between them. Getting a feature to work is
+    mostly a question of placing each piece of it in the only context that can run it.
+  </p>
+
+  <table>
+    <tr><th>Context</th><th>DOM</th><th>Web Audio</th><th>Lifetime</th><th>Spiel uses it for</th></tr>
+    <tr><td>Background service worker</td><td>No</td><td>No</td><td>Killed after ~30s idle</td><td>State machine, TTS fetches, orchestration</td></tr>
+    <tr><td>Content script</td><td>Host page's</td><td>Yes</td><td>Page lifetime</td><td>Extraction, highlighting, floating player</td></tr>
+    <tr><td>Offscreen document</td><td>Own</td><td>Yes — autoplay-exempt</td><td>Reclaimed ~30s after audio stops</td><td>The only place audio plays</td></tr>
+    <tr><td>Popup</td><td>Own</td><td>Yes</td><td>Closes on blur</td><td>The Listen button and first-run setup</td></tr>
+  </table>
+
+  <p>
+    The offscreen document deserves a note, because it is the least obvious of the four.
+    A service worker cannot play audio — it has no <code>AudioContext</code>, no DOM, no
+    <code>Worker</code>. A content script can play audio, but it dies when the tab
+    navigates, and playback should survive scrolling away. The offscreen document is
+    Chrome's answer: an invisible extension page created on demand
+    (<code>chrome.offscreen.createDocument</code>) whose sole job here is to decode MP3
+    clips and play them through Web Audio. Extension pages are exempt from the autoplay
+    policy, so playback starts without a user gesture in that context.
+  </p>
+
+  <div class="box box-note">
+    <strong>The rule that fell out of this:</strong> before writing a feature, write down
+    which API it needs (DOM? Worker? AudioContext? cross-origin fetch?) and let that choose
+    the context. Choosing by convenience is how audio ends up in a service worker that
+    cannot make sound.
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     3. THE PLAYBACK PIPELINE
+═══════════════════════════════════════════════════════════ -->
+<div class="section" id="pipeline">
+  <h2>3. The Playback Pipeline</h2>
+
+  <p>
+    From the user's side, Play means "start reading now." Under it sits a pipeline tuned
+    around one constraint: the local engine serializes generation — one request at a time,
+    and it crashes if a request is cancelled mid-generation. Everything below exists to
+    hide that from the listener.
+  </p>
+
+  <div class="flow">
+    <div class="flow-step"><span class="num">1</span><span class="text">The popup opens → the background prewarms the engine and asks the content script to extract the article <em>before</em> Play is pressed, so the click itself is cheap.</span></div>
+    <div class="flow-step"><span class="num">2</span><span class="text">Extraction runs Mozilla Readability (with per-site selectors for journals it mishandles), strips URLs, reference brackets, and parentheticals — they read terribly aloud — and splits the text into sentences.</span></div>
+    <div class="flow-step"><span class="num">3</span><span class="text">The background fetches sentence <em>n</em> from Kokoro as MP3 + word timestamps, hands it to the offscreen document to play, and immediately prefetches <em>n+1</em> and <em>n+2</em> behind it.</span></div>
+    <div class="flow-step"><span class="num">4</span><span class="text"><code>AUDIO_ENDED</code> comes back → advance the index, serve the next clip (usually already cached), repeat until done.</span></div>
+  </div>
+
+  <h3>The parts that earn their keep</h3>
+  <ul>
+    <li><strong>A single-flight queue.</strong> At most one TTS request is ever on the wire. Cancellation is <em>logical</em>: a generation counter is bumped on every play/skip/stop, and any async work re-checks it before acting. Stale work completes harmlessly instead of being aborted into a crashed engine.</li>
+    <li><strong>An LRU clip cache (20 clips).</strong> Pressing Previous replays instantly instead of re-queueing behind in-flight prefetches — a fresh fetch there used to mean seconds of silence.</li>
+    <li><strong>Settings changes never interrupt the current sentence.</strong> Changing speed regenerates <em>upcoming</em> sentences in the background and takes effect at the next boundary. Stopping good audio to apply a deferrable change is the kind of thing that feels broken even when it's "correct."</li>
+    <li><strong>A shared sentence splitter.</strong> The background and the content script import the same splitting module, because sentence indices are the contract between audio and highlighting. Two copies of "what is a sentence" would drift, and every drifted index is a mis-highlighted word.</li>
+  </ul>
+
+  <div class="diagram-wrapper">
+    <div class="diagram">
+ Popup            Background SW              Kokoro :8880        Offscreen doc
+   │                    │                         │                    │
+   │  PLAY              │                         │                    │
+   │───────────────────►│  (article already       │                    │
+   │  popup closes      │   extracted at open)    │                    │
+   │                    │  sentence 0             │                    │
+   │                    │────────────────────────►│                    │
+   │                    │  MP3 + word timestamps  │                    │
+   │                    │◄────────────────────────│                    │
+   │                    │  PLAY_AUDIO (clip 0)    │                    │
+   │                    │──────────────────────────────────────────────►│
+   │                    │  prefetch 1, 2          │      ▶ playing     │
+   │                    │────────────────────────►│                    │
+   │                    │                         │     AUDIO_ENDED    │
+   │                    │◄──────────────────────────────────────────────│
+   │                    │  PLAY_AUDIO (clip 1 — from cache)             │
+   │                    │──────────────────────────────────────────────►│
+    </div>
+    <p class="diagram-caption">Figure 2 — One sentence through the pipeline, with prefetch hiding generation latency</p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     4. WORD-LEVEL HIGHLIGHTING
+═══════════════════════════════════════════════════════════ -->
+<div class="section" id="karaoke">
+  <h2>4. Word-Level Highlighting</h2>
+
+  <p>
+    The karaoke effect — each word lighting up as it is spoken — is the hardest part of
+    Spiel, and the source of most of its interesting bugs. Two independent systems have to
+    agree: the audio clock and the page's DOM.
+  </p>
+
+  <h3>How a word gets highlighted</h3>
+  <div class="flow">
+    <div class="flow-step"><span class="num">1</span><span class="text">Kokoro returns per-word timestamps with every clip (<code>{word, start, end}</code>).</span></div>
+    <div class="flow-step"><span class="num">2</span><span class="text">The content script builds a word index of the page once — every text node, tokenized, with offsets — and matches each spoken sentence against it.</span></div>
+    <div class="flow-step"><span class="num">3</span><span class="text">When the offscreen document reports the clip actually started, the content script anchors a <code>requestAnimationFrame</code> clock to that moment and walks the timestamps, wrapping the current word in a highlight span.</span></div>
+    <div class="flow-step"><span class="num">4</span><span class="text">If the sentence can't be located in the DOM (PDFs, dynamic pages), the floating player shows its own caption with the same karaoke — the fallback stage.</span></div>
+  </div>
+
+  <h3>Lessons that shaped it</h3>
+  <ul>
+    <li><strong>Never let an animation free-run.</strong> The highlight clock is stopped by the same event that stops audio and restarted only by the signal that audio actually resumed. An animation timed independently of the media it represents drifts the moment the media is interrupted — rapid skipping made the highlighter sprint ahead of a silent page.</li>
+    <li><strong><code>textContent</code> lies about prose.</strong> It concatenates block elements with no separator, producing glued tokens like <code>network.Example:One</code> that match nothing in the word index. Text is derived from the article HTML with explicit breaks at block boundaries instead.</li>
+    <li><strong>Tolerances must scale.</strong> Real pages interleave headings and captions mid-flow; a flat "allow 2 stray tokens" matcher broke on a 4-word heading. The budget now scales with sentence length.</li>
+    <li><strong>Measure before fixing.</strong> A diagnostic script loads any live URL in an automated Chrome and reports exactly which sentences fail to align and on which token. Highlight bugs became measurable numbers instead of anecdotes.</li>
+  </ul>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     5. READING PDFS
+═══════════════════════════════════════════════════════════ -->
+<div class="section" id="pdf">
+  <h2>5. Reading PDFs</h2>
+
+  <p>
+    Chrome renders PDFs inside a plugin whose text the DOM cannot reach, so the normal
+    extraction path is useless there. Spiel instead fetches the PDF's own bytes — a
+    same-origin request from the content script, needing no extra permission — and parses
+    them with pdf.js.
+  </p>
+
+  <ul>
+    <li><strong>Injected on demand.</strong> pdf.js is ~1&nbsp;MB; bundling it into the always-on content script would tax every page ever visited. A separate <code>pdf-content.js</code> is injected only into PDF tabs, only when needed.</li>
+    <li><strong>The worker problem.</strong> pdf.js expects to resolve its worker via <code>import.meta.url</code>, which breaks when bundled into extension formats. The worker path is set explicitly to an extension URL and the worker file ships as a <code>web_accessible_resource</code>.</li>
+    <li><strong>Local files are a permission, not a bug.</strong> <code>file://</code> PDFs require the user's "Allow access to file URLs" toggle. Spiel detects the injection failure and shows the exact instruction instead of a raw error.</li>
+  </ul>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     6. SURVIVING CHROME
+═══════════════════════════════════════════════════════════ -->
+<div class="section" id="robustness">
+  <h2>6. Surviving Chrome</h2>
+
+  <p>
+    MV3's economics are hostile to long-running state: Chrome kills the service worker
+    after ~30 seconds of quiet, reclaims the offscreen document ~30 seconds after audio
+    stops, and orphans every injected content script the moment the extension reloads.
+    Spiel assumes all of this <em>will</em> happen mid-listen and plans for it.
+  </p>
+
+  <table>
+    <tr><th>Chrome does this</th><th>Spiel's defense</th></tr>
+    <tr><td>Kills the SW while paused (no message traffic)</td><td>The whole playback state persists to <code>storage.session</code> on every change and is restored before the first message is handled</td></tr>
+    <tr><td>Reclaims the offscreen document during a pause</td><td>Restore detects the loss and re-fetches the current sentence on Resume instead of resuming into the void</td></tr>
+    <tr><td>Orphans old content scripts on extension reload</td><td>Every document-level listener checks <code>chrome.runtime?.id</code> first; orphans remove their UI and go quiet — the fresh script owns the tab</td></tr>
+    <tr><td>Lets users hammer every control</td><td>Generation counters, a single-flight queue, and post-<code>await</code> state re-checks make play/pause/skip spam-safe; every <code>await</code> is treated as a point where the world may have changed</td></tr>
+    <tr><td>Lets a fetch hang forever</td><td>A 90-second watchdog turns hangs into a visible error card with a retry — never infinite silence</td></tr>
+  </table>
+
+  <div class="box box-warn">
+    <strong>The recurring mistake class</strong> in this codebase was never exotic: a state
+    check done <em>before</em> an <code>await</code> or a queue wait, acted on <em>after</em>.
+    Pause landing during Resume's await, a sentence generated twice because the cache was
+    checked before entering the queue. The fix is always the same — re-validate at
+    execution time, not submission time.
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     7. THE PRIVACY MODEL
+═══════════════════════════════════════════════════════════ -->
+<div class="section" id="privacy">
+  <h2>7. The Privacy Model</h2>
+
+  <p>
+    Read-aloud tools are either subscriptions or cloud services that see everything you
+    read. Spiel's answer is structural, not policy: there is no server to send anything to.
+  </p>
+
+  <table>
+    <tr><th>Permission</th><th>Why it exists</th></tr>
+    <tr><td><code>activeTab</code>, <code>scripting</code></td><td>Inject the reader into the tab the user invoked it on — no blanket <code>tabs</code> access</td></tr>
+    <tr><td><code>offscreen</code></td><td>Create the audio playback document</td></tr>
+    <tr><td><code>storage</code>, <code>alarms</code></td><td>Preferences, state persistence across SW restarts, keep-warm pings</td></tr>
+    <tr><td><code>host: 127.0.0.1:8880</code></td><td>The voice engine — loopback only, unreachable from the network</td></tr>
+    <tr><td><code>file:///*</code></td><td>Reading local PDFs (still requires the user's explicit toggle)</td></tr>
+  </table>
+
+  <div class="box box-secure">
+    <strong>The guarantee:</strong> page text goes to <code>127.0.0.1</code> and nowhere
+    else. No analytics, no telemetry, no accounts. The only network traffic Spiel ever
+    creates is the one-time engine download at install — and after that, it reads to you
+    with the Wi-Fi off.
+  </div>
+
+  <hr />
+
+  <p style="font-size:10pt;color:#888;">
+    Source, build gates, and the full lessons-learned log are on
+    <a href="https://github.com/preet01/spiel">GitHub</a>.
+  </p>
+</div>
+
+</body>
+</html>
