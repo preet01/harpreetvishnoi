@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "What I Learned Testing Claude and GPT for Sycophancy"
+title: "Claude Sonnet 5 vs GPT 5.6: The Sycophancy Test"
 date: 2026-07-10
 read_time: 4
 ---
