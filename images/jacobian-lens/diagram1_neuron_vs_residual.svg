@@ -1,0 +1,59 @@
+<svg width="700" height="420" viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="700" height="420" fill="#ffffff"/>
+
+  <text x="350" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#222222">Two ways information gets passed along</text>
+
+  <!-- Left: biological neuron chain -->
+  <text x="175" y="65" text-anchor="middle" font-size="14" font-weight="bold" fill="#0C447C">A chain of neurons</text>
+  <circle cx="60" cy="200" r="26" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+  <text x="60" y="205" text-anchor="middle" font-size="11" fill="#0C447C">neuron 1</text>
+  <line x1="86" y1="200" x2="144" y2="200" stroke="#185FA5" stroke-width="2" marker-end="url(#arrowB)"/>
+  <text x="115" y="190" text-anchor="middle" font-size="10" fill="#5F5E5A">spike + chemical</text>
+
+  <circle cx="175" cy="200" r="26" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+  <text x="175" y="205" text-anchor="middle" font-size="11" fill="#0C447C">neuron 2</text>
+  <line x1="201" y1="200" x2="259" y2="200" stroke="#185FA5" stroke-width="2" marker-end="url(#arrowB)"/>
+  <text x="230" y="190" text-anchor="middle" font-size="10" fill="#5F5E5A">spike + chemical</text>
+
+  <circle cx="290" cy="200" r="26" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+  <text x="290" y="205" text-anchor="middle" font-size="11" fill="#0C447C">neuron 3</text>
+
+  <text x="175" y="255" text-anchor="middle" font-size="11" fill="#5F5E5A">Each neuron passes a signal</text>
+  <text x="175" y="270" text-anchor="middle" font-size="11" fill="#5F5E5A">only to its neighbor</text>
+
+  <!-- divider -->
+  <line x1="350" y1="55" x2="350" y2="330" stroke="#D3D1C7" stroke-width="1"/>
+
+  <!-- Right: residual stream -->
+  <text x="525" y="65" text-anchor="middle" font-size="14" font-weight="bold" fill="#712B13">The residual stream</text>
+
+  <rect x="480" y="90" width="90" height="34" rx="6" fill="#FAECE7" stroke="#993C1D" stroke-width="1.5"/>
+  <text x="525" y="111" text-anchor="middle" font-size="12" fill="#712B13">I1</text>
+  <line x1="525" y1="124" x2="525" y2="150" stroke="#993C1D" stroke-width="2" marker-end="url(#arrowC)"/>
+
+  <rect x="480" y="152" width="90" height="34" rx="6" fill="#FAECE7" stroke="#993C1D" stroke-width="1.5"/>
+  <text x="525" y="173" text-anchor="middle" font-size="12" fill="#712B13">I2</text>
+  <line x1="525" y1="186" x2="525" y2="212" stroke="#993C1D" stroke-width="2" marker-end="url(#arrowC)"/>
+
+  <rect x="480" y="214" width="90" height="34" rx="6" fill="#FAECE7" stroke="#993C1D" stroke-width="1.5"/>
+  <text x="525" y="235" text-anchor="middle" font-size="12" fill="#712B13">I3</text>
+  <line x1="525" y1="248" x2="525" y2="274" stroke="#993C1D" stroke-width="2" marker-end="url(#arrowC)"/>
+
+  <rect x="480" y="276" width="90" height="34" rx="6" fill="#F5C4B3" stroke="#993C1D" stroke-width="1.5"/>
+  <text x="525" y="297" text-anchor="middle" font-size="12" fill="#712B13">final</text>
+
+  <text x="525" y="330" text-anchor="middle" font-size="11" fill="#5F5E5A">One vector, updated and</text>
+  <text x="525" y="345" text-anchor="middle" font-size="11" fill="#5F5E5A">carried forward by every layer</text>
+
+  <text x="350" y="380" text-anchor="middle" font-size="12" fill="#444441">A brain routes signals neuron to neuron. A transformer keeps one running vector</text>
+  <text x="350" y="398" text-anchor="middle" font-size="12" fill="#444441">and every layer reads it, computes, and adds its contribution back in.</text>
+
+  <defs>
+    <marker id="arrowB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#185FA5"/>
+    </marker>
+    <marker id="arrowC" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#993C1D"/>
+    </marker>
+  </defs>
+</svg>

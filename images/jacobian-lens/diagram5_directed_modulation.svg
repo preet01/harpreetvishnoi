@@ -1,0 +1,26 @@
+<svg width="700" height="360" viewBox="0 0 700 360" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="700" height="360" fill="#ffffff"/>
+  <text x="350" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#222222">Holding a concept in mind while saying something else</text>
+
+  <text x="350" y="62" text-anchor="middle" font-size="12" fill="#5F5E5A">Instruction: concentrate on citrus fruits while writing an unrelated sentence</text>
+
+  <rect x="60" y="80" width="580" height="46" rx="8" fill="#F1EFE8" stroke="#888780" stroke-width="1"/>
+  <text x="350" y="107" text-anchor="middle" font-size="13" fill="#2C2C2A">Output: "The old painting hung crookedly on the wall."</text>
+
+  <line x1="350" y1="126" x2="350" y2="156" stroke="#5F5E5A" stroke-width="1.2" marker-end="url(#a8)"/>
+  <text x="365" y="145" font-size="10" fill="#5F5E5A">J-lens checked here, mid-word</text>
+
+  <rect x="230" y="158" width="240" height="46" rx="8" fill="#9FE1CB" stroke="#0F6E56" stroke-width="1.5"/>
+  <text x="350" y="185" text-anchor="middle" font-size="13" fill="#04342C" font-weight="bold">J-space top word: orange</text>
+
+  <text x="350" y="240" text-anchor="middle" font-size="12" fill="#444441">The output sentence never mentions fruit. But at the exact moment</text>
+  <text x="350" y="258" text-anchor="middle" font-size="12" fill="#444441">checked, the J-space is quietly holding "orange" -- the model is</text>
+  <text x="350" y="276" text-anchor="middle" font-size="12" fill="#444441">thinking one thing while writing another, just like a person can.</text>
+
+  <text x="350" y="316" text-anchor="middle" font-size="11" fill="#888780">Same effect shown with mental math: 3^2 - 2 traced through</text>
+  <text x="350" y="332" text-anchor="middle" font-size="11" fill="#888780">"arithmetic" -> "nine" -> "seven", all silent, all inside the J-space.</text>
+
+  <defs>
+    <marker id="a8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5F5E5A"/></marker>
+  </defs>
+</svg>

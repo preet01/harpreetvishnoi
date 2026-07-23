@@ -1,0 +1,58 @@
+<svg width="700" height="520" viewBox="0 0 700 520" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="700" height="520" fill="#ffffff"/>
+  <text x="350" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#222222">How the Jacobian lens reads a middle layer</text>
+
+  <!-- layer stack left -->
+  <rect x="40" y="70" width="90" height="36" rx="6" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="1"/>
+  <text x="85" y="93" text-anchor="middle" font-size="12" fill="#2C2C2A">Layer 1 -> I1</text>
+  <line x1="85" y1="106" x2="85" y2="132" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#a1)"/>
+
+  <rect x="40" y="134" width="90" height="36" rx="6" fill="#B5D4F4" stroke="#185FA5" stroke-width="1.5"/>
+  <text x="85" y="157" text-anchor="middle" font-size="12" fill="#0C447C">Layer 2 -> I2</text>
+  <line x1="85" y1="170" x2="85" y2="196" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#a1)"/>
+
+  <rect x="40" y="198" width="90" height="36" rx="6" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="1"/>
+  <text x="85" y="221" text-anchor="middle" font-size="12" fill="#2C2C2A">Layer 3 -> I3</text>
+  <line x1="85" y1="234" x2="85" y2="260" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#a1)"/>
+
+  <rect x="40" y="262" width="90" height="36" rx="6" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="1"/>
+  <text x="85" y="285" text-anchor="middle" font-size="12" fill="#2C2C2A">Layer 4 -> I4</text>
+  <line x1="85" y1="298" x2="85" y2="324" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#a1)"/>
+
+  <rect x="40" y="326" width="90" height="36" rx="6" fill="#F0997B" stroke="#993C1D" stroke-width="1.5"/>
+  <text x="85" y="349" text-anchor="middle" font-size="12" fill="#4A1B0C">Layer 5 -> I5 (final)</text>
+
+  <!-- curved bracket I2 to I5 -->
+  <path d="M135 152 C 230 152, 230 344, 135 344" fill="none" stroke="#888780" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="245" y="248" text-anchor="middle" font-size="12" font-weight="bold" fill="#444441">J2 = average of</text>
+  <text x="245" y="264" text-anchor="middle" font-size="12" font-weight="bold" fill="#444441">dI5 / dI2</text>
+  <text x="245" y="284" text-anchor="middle" font-size="11" fill="#5F5E5A">over 1000 prompts</text>
+
+  <!-- pipeline right -->
+  <line x1="360" y1="152" x2="410" y2="152" stroke="#185FA5" stroke-width="1.5" marker-end="url(#a2)"/>
+  <rect x="410" y="130" width="230" height="44" rx="8" fill="#CECBF6" stroke="#534AB7" stroke-width="1.5"/>
+  <text x="525" y="147" text-anchor="middle" font-size="12" fill="#26215C" font-weight="bold">Apply J2 to activation I2</text>
+  <text x="525" y="163" text-anchor="middle" font-size="11" fill="#3C3489">translate into final-layer form</text>
+  <line x1="525" y1="174" x2="525" y2="200" stroke="#534AB7" stroke-width="1.5" marker-end="url(#a3)"/>
+
+  <rect x="410" y="202" width="230" height="44" rx="8" fill="#9FE1CB" stroke="#0F6E56" stroke-width="1.5"/>
+  <text x="525" y="219" text-anchor="middle" font-size="12" fill="#04342C" font-weight="bold">Unembed with WU</text>
+  <text x="525" y="235" text-anchor="middle" font-size="11" fill="#085041">same step model uses at the end</text>
+  <line x1="525" y1="246" x2="525" y2="272" stroke="#0F6E56" stroke-width="1.5" marker-end="url(#a4)"/>
+
+  <rect x="410" y="274" width="230" height="60" rx="8" fill="#FAC775" stroke="#854F0B" stroke-width="1.5"/>
+  <text x="525" y="296" text-anchor="middle" font-size="12" fill="#412402" font-weight="bold">Ranked word list</text>
+  <text x="525" y="312" text-anchor="middle" font-size="11" fill="#633806">e.g. Soccer, Basketball, Football...</text>
+  <text x="525" y="326" text-anchor="middle" font-size="11" fill="#633806">top word = what model leans toward</text>
+
+  <text x="350" y="400" text-anchor="middle" font-size="12" fill="#444441">The J-lens takes a snapshot from any middle layer, translates it into</text>
+  <text x="350" y="418" text-anchor="middle" font-size="12" fill="#444441">"final layer language" using the averaged Jacobian, then runs the model's</text>
+  <text x="350" y="436" text-anchor="middle" font-size="12" fill="#444441">own final step early -- revealing what it is currently poised to say.</text>
+
+  <defs>
+    <marker id="a1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5F5E5A"/></marker>
+    <marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#185FA5"/></marker>
+    <marker id="a3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#534AB7"/></marker>
+    <marker id="a4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0F6E56"/></marker>
+  </defs>
+</svg>
