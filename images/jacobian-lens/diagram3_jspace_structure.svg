@@ -1,0 +1,36 @@
+<svg width="700" height="340" viewBox="0 0 700 340" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="700" height="340" fill="#ffffff"/>
+  <text x="350" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#222222">Where the workspace lives: a band, not the whole network</text>
+
+  <line x1="60" y1="108" x2="640" y2="108" stroke="#5F5E5A" stroke-width="1.2" marker-end="url(#j1)"/>
+  <text x="350" y="98" text-anchor="middle" font-size="11" fill="#5F5E5A">depth into the network &#8594;</text>
+
+  <rect x="60" y="140" width="160" height="50" fill="#F1EFE8" stroke="#888780" stroke-width="1"/>
+  <text x="140" y="170" text-anchor="middle" font-size="12" font-weight="bold" fill="#2C2C2A">Early layers</text>
+
+  <rect x="220" y="140" width="260" height="50" fill="#9FE1CB" stroke="#0F6E56" stroke-width="1.5"/>
+  <text x="350" y="163" text-anchor="middle" font-size="12" font-weight="bold" fill="#04342C">Middle layers</text>
+  <text x="350" y="178" text-anchor="middle" font-size="11" fill="#04342C">the workspace band</text>
+
+  <rect x="480" y="140" width="160" height="50" fill="#FAC775" stroke="#854F0B" stroke-width="1.5"/>
+  <text x="560" y="163" text-anchor="middle" font-size="12" font-weight="bold" fill="#412402">Final layers</text>
+  <text x="560" y="178" text-anchor="middle" font-size="11" fill="#412402">"motor regime"</text>
+
+  <text x="140" y="212" text-anchor="middle" font-size="11" fill="#5F5E5A">mostly parsing</text>
+  <text x="140" y="226" text-anchor="middle" font-size="11" fill="#5F5E5A">the raw input</text>
+
+  <text x="350" y="212" text-anchor="middle" font-size="11" fill="#085041">limited capacity,</text>
+  <text x="350" y="226" text-anchor="middle" font-size="11" fill="#085041">broadcasts widely,</text>
+  <text x="350" y="240" text-anchor="middle" font-size="11" fill="#085041">holds concepts</text>
+
+  <text x="560" y="212" text-anchor="middle" font-size="11" fill="#633806">locks onto the</text>
+  <text x="560" y="226" text-anchor="middle" font-size="11" fill="#633806">exact next word</text>
+
+  <text x="350" y="285" text-anchor="middle" font-size="12" fill="#444441">The workspace isn't the whole network -- it's a specific middle band. Its</text>
+  <text x="350" y="303" text-anchor="middle" font-size="12" fill="#444441">directions connect to more of the model's circuitry than most other</text>
+  <text x="350" y="321" text-anchor="middle" font-size="12" fill="#444441">representations do -- the signature of something meant to be broadcast.</text>
+
+  <defs>
+    <marker id="j1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5F5E5A"/></marker>
+  </defs>
+</svg>

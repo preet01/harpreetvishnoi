@@ -27,6 +27,8 @@ Early in the stack, that page holds barely more than "which word is this." By th
 
 If we label the state of that page after each layer as I1, I2, I3, I4, and I5 (the final layer), we get a clean way to talk about a snapshot at any point in the process. Each of those snapshots is called an activation.
 
+![How a transformer layer writes to the residual stream without erasing what came before](/images/jacobian-lens/diagram6_residual_write_pattern.svg)
+
 ## Part 3: The question a group of Anthropic researchers asked
 
 In July 2026, a team at Anthropic (Wes Gurnee, Nicholas Sofroniew, Jack Lindsey, and collaborators) published a paper called "Verbalizable Representations Form a Global Workspace in Language Models." Their question borrows directly from neuroscience.
@@ -34,6 +36,8 @@ In July 2026, a team at Anthropic (Wes Gurnee, Nicholas Sofroniew, Jack Lindsey,
 In your brain, only a small slice of everything happening is ever available to you consciously, the part you could describe if someone asked. The rest, your visual system parsing a face, your motor system holding your posture, runs automatically, invisibly. Cognitive scientists call the accessible slice the global workspace, a shared space that many parts of the brain can read from and write to, that supports deliberate reasoning, that you can hold a thought in, and that is limited in size.
 
 The researchers asked whether something similar has quietly emerged inside language models. Is there a small, privileged set of internal representations, sitting on top of a much larger mass of automatic processing, that a model can report on, hold in mind, and reason with.
+
+![The global workspace analogy: a small reportable slice inside a much larger mass of automatic processing](/images/jacobian-lens/diagram7_global_workspace_analogy.svg)
 
 To go looking for it, they needed a way to peek inside the residual stream at a middle layer and ask, in a principled way, what is this activation currently disposed to make the model eventually say.
 
@@ -84,6 +88,8 @@ They also found this control is imperfect in a way that will feel familiar to an
 ## Part 7: The shape of the workspace itself
 
 Beyond just existing, this workspace has real structure. It only behaves like a workspace across a band of middle layers, not the whole network. Early layers are mostly parsing the raw input, and the final few layers shift into what the researchers call a motor regime, locking in on the specific next word rather than holding abstract concepts anymore.
+
+![The J-space sits in a middle band of layers, not the whole network](/images/jacobian-lens/diagram3_jspace_structure.svg)
 
 Within that middle band, the workspace has limited capacity, a small number of concepts active at once, occupying only a minority of the total activity happening at that layer. And it behaves like a genuine broadcast format, meaning the directions that make it up connect, both upstream and downstream, to a wider set of the model's internal circuitry than most other representations do. That is the mechanistic fingerprint of something meant to be written once and read by many different parts of the system, exactly the role a global workspace is supposed to play.
 

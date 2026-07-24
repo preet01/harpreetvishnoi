@@ -1,0 +1,32 @@
+<svg width="700" height="400" viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="700" height="400" fill="#ffffff"/>
+  <text x="350" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#222222">Does a model have its own global workspace?</text>
+
+  <!-- divider -->
+  <line x1="350" y1="55" x2="350" y2="330" stroke="#D3D1C7" stroke-width="1"/>
+
+  <!-- Left: the human brain -->
+  <text x="175" y="65" text-anchor="middle" font-size="14" font-weight="bold" fill="#0C447C">The human brain</text>
+  <rect x="45" y="80" width="260" height="200" rx="16" fill="#F1EFE8" stroke="#888780" stroke-width="1"/>
+  <text x="175" y="100" text-anchor="middle" font-size="10" fill="#5F5E5A">vision &#183; motor control &#183; habits</text>
+  <text x="175" y="114" text-anchor="middle" font-size="10" fill="#5F5E5A">-- automatic, invisible to you --</text>
+
+  <circle cx="175" cy="205" r="58" fill="#B5D4F4" stroke="#185FA5" stroke-width="1.5"/>
+  <text x="175" y="198" text-anchor="middle" font-size="12" font-weight="bold" fill="#042C53">Global</text>
+  <text x="175" y="213" text-anchor="middle" font-size="12" font-weight="bold" fill="#042C53">workspace</text>
+  <text x="175" y="230" text-anchor="middle" font-size="9" fill="#0C447C">conscious &#183; reportable</text>
+
+  <!-- Right: the language model -->
+  <text x="525" y="65" text-anchor="middle" font-size="14" font-weight="bold" fill="#712B13">A language model</text>
+  <rect x="395" y="80" width="260" height="200" rx="16" fill="#F1EFE8" stroke="#888780" stroke-width="1"/>
+  <text x="525" y="100" text-anchor="middle" font-size="10" fill="#5F5E5A">layer-by-layer computation</text>
+  <text x="525" y="114" text-anchor="middle" font-size="10" fill="#5F5E5A">-- mostly automatic --</text>
+
+  <circle cx="525" cy="205" r="58" fill="#F5C4B3" stroke="#993C1D" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="525" y="198" text-anchor="middle" font-size="12" font-weight="bold" fill="#4A1B0C">A small set of</text>
+  <text x="525" y="213" text-anchor="middle" font-size="12" font-weight="bold" fill="#4A1B0C">representations?</text>
+  <text x="525" y="230" text-anchor="middle" font-size="9" fill="#712B13">the paper's actual question</text>
+
+  <text x="350" y="355" text-anchor="middle" font-size="12" fill="#444441">A brain reports only a privileged slice of everything it computes. The paper asks</text>
+  <text x="350" y="373" text-anchor="middle" font-size="12" fill="#444441">whether a transformer has quietly grown the same kind of privileged, reportable slice.</text>
+</svg>

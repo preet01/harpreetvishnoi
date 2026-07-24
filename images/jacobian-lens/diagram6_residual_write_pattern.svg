@@ -1,0 +1,37 @@
+<svg width="700" height="420" viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <rect width="700" height="420" fill="#ffffff"/>
+  <text x="350" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#222222">Each layer adds to the page -- it never erases it</text>
+
+  <rect x="220" y="62" width="260" height="46" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+  <text x="350" y="90" text-anchor="middle" font-size="13" fill="#0C447C">I2 -- the page coming into this layer</text>
+  <line x1="350" y1="108" x2="350" y2="136" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#r1)"/>
+
+  <rect x="220" y="138" width="260" height="52" rx="8" fill="#CECBF6" stroke="#534AB7" stroke-width="1.5"/>
+  <text x="350" y="161" text-anchor="middle" font-size="12" font-weight="bold" fill="#26215C">Layer 3 computes a contribution</text>
+  <text x="350" y="178" text-anchor="middle" font-size="11" fill="#3C3489">(attention + MLP) = &#916;</text>
+  <line x1="350" y1="190" x2="350" y2="214" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#r2)"/>
+
+  <circle cx="350" cy="236" r="22" fill="#ffffff" stroke="#444441" stroke-width="2"/>
+  <text x="350" y="243" text-anchor="middle" font-size="20" fill="#444441">+</text>
+  <line x1="350" y1="258" x2="350" y2="282" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#r3)"/>
+
+  <rect x="220" y="284" width="260" height="46" rx="8" fill="#B5D4F4" stroke="#185FA5" stroke-width="1.5"/>
+  <text x="350" y="312" text-anchor="middle" font-size="13" fill="#042C53" font-weight="bold">I3 = I2 + &#916; -- the page after this layer</text>
+
+  <path d="M480 85 C 575 85, 575 236, 376 236" fill="none" stroke="#888780" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#r4)"/>
+  <text x="585" y="140" text-anchor="middle" font-size="11" fill="#5F5E5A">I2 also passes</text>
+  <text x="585" y="156" text-anchor="middle" font-size="11" fill="#5F5E5A">straight through,</text>
+  <text x="585" y="172" text-anchor="middle" font-size="11" fill="#5F5E5A">unchanged</text>
+  <text x="585" y="192" text-anchor="middle" font-size="10" fill="#888780">(the skip connection)</text>
+
+  <text x="350" y="358" text-anchor="middle" font-size="12" fill="#444441">Nothing gets thrown away -- each layer only adds a contribution on top of</text>
+  <text x="350" y="376" text-anchor="middle" font-size="12" fill="#444441">what's already there. That's why I5, the final page, still carries traces</text>
+  <text x="350" y="394" text-anchor="middle" font-size="12" fill="#444441">of everything computed all the way back at I1.</text>
+
+  <defs>
+    <marker id="r1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5F5E5A"/></marker>
+    <marker id="r2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5F5E5A"/></marker>
+    <marker id="r3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5F5E5A"/></marker>
+    <marker id="r4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#888780"/></marker>
+  </defs>
+</svg>
