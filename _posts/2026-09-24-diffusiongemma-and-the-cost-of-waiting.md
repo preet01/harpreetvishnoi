@@ -5,7 +5,7 @@ date: 2026-09-24
 read_time: 3
 ---
 
-Hey, when you ask an AI a question, what do you do while it thinks? You probably wait a few seconds, open another tab, check a message, and come back. By then, you've lost a little of the flow. Now imagine doing that every time you need help with something.
+When you ask an AI a question, what do you do while it thinks? You probably wait a few seconds, open another tab, check a message, and come back. By then, you've lost a little of the flow. Now imagine doing that every time you need help with something.
 
 That's what got me interested in DiffusionGemma. We talk a lot about how smart AI is getting. I'm equally interested in what happens when it gets fast enough to keep up with us.
 
@@ -26,5 +26,3 @@ The same idea gets interesting with agents. A coding agent writes a fix, runs a 
 Voice is another obvious opportunity. Shorter pauses could make a tutor, shopping assistant, or customer service bot feel easier to talk to. Detecting when someone has finished speaking and generating audio also take time, so faster text is one part of making that conversation feel natural.
 
 DiffusionGemma still trails its Gemma 4 counterpart on several quality measures. I'd still want a stronger model for a difficult problem, and faster generation won't make a slow database or test suite disappear. But I see real potential in the everyday tasks where the answer is good enough and timing matters. Help that arrives while you're doing something could become a much bigger part of how we work.
-
-[Download the one-page PDF](/images/diffusiongemma/diffusiongemma-and-the-cost-of-waiting.pdf)
