@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="528" height="111" preserveAspectRatio="xMinYMin meet" viewBox="0 0 528 111" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="528" height="111"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-111)" style="clip-path: url(#clip)">
+		<g transform="">
+			<g transform="">
+				<path d="M 193,17 L 193,103 Z" style="stroke: rgb(90%,92%,92%); stroke-linecap: butt; stroke-width: 0.25;"/>
+				<path d="M 265.75,17 L 265.75,103 Z" style="stroke: rgb(90%,92%,92%); stroke-linecap: butt; stroke-width: 0.25;"/>
+				<path d="M 338.5,17 L 338.5,103 Z" style="stroke: rgb(90%,92%,92%); stroke-linecap: butt; stroke-width: 0.25;"/>
+				<path d="M 411.25,17 L 411.25,103 Z" style="stroke: rgb(90%,92%,92%); stroke-linecap: butt; stroke-width: 0.25;"/>
+				<path d="M 484,17 L 484,103 Z" style="stroke: rgb(90%,92%,92%); stroke-linecap: butt; stroke-width: 0.25;"/>
+				<g transform="">
+					<rect x="193.0" y="21.77777777777778" width="12.610000000000014" height="11.944444444444443" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(45%,53%,59%); fill-rule: evenodd;"/>
+					<rect x="193.0" y="43.27777777777778" width="21.340000000000003" height="11.944444444444443" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(45%,53%,59%); fill-rule: evenodd;"/>
+					<rect x="193.0" y="64.77777777777777" width="24.007499999999993" height="11.944444444444443" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(45%,53%,59%); fill-rule: evenodd;"/>
+					<rect x="193.0" y="86.27777777777777" width="266.75" height="11.944444444444443" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(8%,52%,49%); fill-rule: evenodd;"/>
+					<g transform="">
+						<g transform=" matrix(1,0,0,1,209.61,27.75)">
+							<text x="0.0" y="-3.2" style="font-family: Arial-Bold; font-size: 8px;fill: rgb(9%,15%,19%); stroke:none;" transform="translate(0,-6) scale(1,-1)">52</text>
+						</g>
+						<g transform=" matrix(1,0,0,1,218.34,49.25)">
+							<text x="0.0" y="-3.2" style="font-family: Arial-Bold; font-size: 8px;fill: rgb(9%,15%,19%); stroke:none;" transform="translate(0,-6) scale(1,-1)">88</text>
+						</g>
+						<g transform=" matrix(1,0,0,1,221.0075,70.75)">
+							<text x="0.0" y="-3.2" style="font-family: Arial-Bold; font-size: 8px;fill: rgb(9%,15%,19%); stroke:none;" transform="translate(0,-6) scale(1,-1)">99</text>
+						</g>
+						<g transform=" matrix(1,0,0,1,463.75,92.25)">
+							<text x="0.0" y="-3.2" style="font-family: Arial-Bold; font-size: 8px;fill: rgb(9%,15%,19%); stroke:none;" transform="translate(0,-6) scale(1,-1)">1,100+</text>
+						</g>
+					</g>
+				</g>
+				<g transform="">
+					<g transform=""/>
+					<g transform=""/>
+					<g transform="">
+						<g transform=" matrix(1,0,0,1,188,27.75)">
+							<text x="-67.12890625" y="-3.2" style="font-family: Arial; font-size: 8px;fill: rgb(9%,15%,19%); stroke:none;" transform="translate(0,-6) scale(1,-1)">GPT-6 Astra (high)</text>
+						</g>
+						<g transform=" matrix(1,0,0,1,188,49.25)">
+							<text x="-114.28515625" y="-3.2" style="font-family: Arial; font-size: 8px;fill: rgb(9%,15%,19%); stroke:none;" transform="translate(0,-6) scale(1,-1)">Claude Opus 5.5 (high, fallback)</text>
+						</g>
+						<g transform=" matrix(1,0,0,1,188,70.75)">
+							<text x="-60.0078125" y="-3.2" style="font-family: Arial; font-size: 8px;fill: rgb(9%,15%,19%); stroke:none;" transform="translate(0,-6) scale(1,-1)">GPT-6 Sol (max)</text>
+						</g>
+						<g transform=" matrix(1,0,0,1,188,92.25)">
+							<text x="-105.37890625" y="-3.2" style="font-family: Arial; font-size: 8px;fill: rgb(9%,15%,19%); stroke:none;" transform="translate(0,-6) scale(1,-1)">DiffusionGemma - Google lab</text>
+						</g>
+					</g>
+				</g>
+				<g transform="">
+					<g transform="">
+						<path d="M 193,17 L 484,17 Z" style="stroke: rgb(80%,83%,84%); stroke-linecap: butt; stroke-width: 1;"/>
+					</g>
+					<g transform="">
+						<path d="M 193,17 L 193,12 Z" style="stroke: rgb(80%,83%,84%); stroke-linecap: butt; stroke-width: 1;"/>
+						<path d="M 265.75,17 L 265.75,12 Z" style="stroke: rgb(80%,83%,84%); stroke-linecap: butt; stroke-width: 1;"/>
+						<path d="M 338.5,17 L 338.5,12 Z" style="stroke: rgb(80%,83%,84%); stroke-linecap: butt; stroke-width: 1;"/>
+						<path d="M 411.25,17 L 411.25,12 Z" style="stroke: rgb(80%,83%,84%); stroke-linecap: butt; stroke-width: 1;"/>
+						<path d="M 484,17 L 484,12 Z" style="stroke: rgb(80%,83%,84%); stroke-linecap: butt; stroke-width: 1;"/>
+					</g>
+					<g transform="">
+						<g transform=" matrix(1,0,0,1,193,12)">
+							<text x="-1.946533203125" y="-7.000000000000001" style="font-family: Arial; font-size: 7px;fill: rgb(32%,38%,41%); stroke:none;" transform="translate(0,-14) scale(1,-1)">0</text>
+						</g>
+						<g transform=" matrix(1,0,0,1,265.75,12)">
+							<text x="-5.839599609375" y="-7.000000000000001" style="font-family: Arial; font-size: 7px;fill: rgb(32%,38%,41%); stroke:none;" transform="translate(0,-14) scale(1,-1)">300</text>
+						</g>
+						<g transform=" matrix(1,0,0,1,338.5,12)">
+							<text x="-5.839599609375" y="-7.000000000000001" style="font-family: Arial; font-size: 7px;fill: rgb(32%,38%,41%); stroke:none;" transform="translate(0,-14) scale(1,-1)">600</text>
+						</g>
+						<g transform=" matrix(1,0,0,1,411.25,12)">
+							<text x="-5.839599609375" y="-7.000000000000001" style="font-family: Arial; font-size: 7px;fill: rgb(32%,38%,41%); stroke:none;" transform="translate(0,-14) scale(1,-1)">900</text>
+						</g>
+						<g transform=" matrix(1,0,0,1,484,12)">
+							<text x="-7.7861328125" y="-7.000000000000001" style="font-family: Arial; font-size: 7px;fill: rgb(32%,38%,41%); stroke:none;" transform="translate(0,-14) scale(1,-1)">1200</text>
+						</g>
+					</g>
+				</g>
+			</g>
+		</g>
+	</g>
+</svg>
