@@ -53,6 +53,6 @@ The maths combines Lambda's measured performance with RunPod's advertised rental
 
 The benchmark also uses many requests running at once, with longer waiting times. It tells me how much work the setup can process, not how quickly an individual user will receive an answer. The API figure prices the same token volume; it is not a measurement of the API's response time or a guarantee of its hourly capacity.
 
-Different hardware, lower rental prices, or better serving software could change the result. Privacy and control may also justify self-hosting even when it costs more.
+The maths can shift in favor of renting. Companies may negotiate lower GPU prices, use cheaper interruptible capacity for work that can wait, or optimize their setup to process more tokens per second. Those changes can make self-hosting cheaper, provided there is enough useful work to keep the GPUs busy.
 
-But for this setup, the maths favors the managed API even with the rented GPUs kept busy. Using an open model and running its infrastructure are separate decisions. In this comparison, paying a provider to run the model is cheaper.
+For a small company, though, the GPU bill is only part of the cost. Setting up, maintaining, and troubleshooting the infrastructure takes engineering time that could go toward the product. Unless self-hosting offers a clear advantage, managed APIs often make more economic sense: pay for what you use and focus on building something customers want.
